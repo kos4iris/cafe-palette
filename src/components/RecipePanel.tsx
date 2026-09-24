@@ -9,29 +9,33 @@ interface Props {
 
 export function RecipePanel({ selected, recipe, onRemove, onClear }: Props) {
   return (
-    <aside className="panel recipe-panel">
-      <header className="panel-header">
-        <p className="eyebrow">Your pour</p>
+    <aside className="menu-panel">
+      <header className="menu-header">
         <div className="recipe-title-row">
-          <h2>Recipe</h2>
+          <h2>Menu</h2>
           {selected.length > 0 && (
             <button type="button" className="text-btn" onClick={onClear}>
-              Clear all
+              clear
             </button>
           )}
         </div>
+        <p className="menu-note">Selected ingredients & recipe</p>
       </header>
 
       <section className="current-list" aria-label="Current ingredients">
-        <h3>In the glass</h3>
         {selected.length === 0 ? (
-          <p className="empty">Nothing yet — start with a fruit and a base.</p>
+          <p className="empty">
+            Drag pictures into the glass — one flavor, one base.
+          </p>
         ) : (
-          <ul>
-            {selected.map((ing) => (
+          <ul className="menu-index">
+            {selected.map((ing, i) => (
               <li key={ing.id}>
-                <span>
-                  {ing.emoji} {ing.name}
+                <span className="menu-idx">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="menu-item-name">
+                  <span aria-hidden>{ing.emoji}</span> {ing.name}
                 </span>
                 <button
                   type="button"
@@ -47,14 +51,11 @@ export function RecipePanel({ selected, recipe, onRemove, onClear }: Props) {
         )}
       </section>
 
+      <div className="menu-rule" aria-hidden />
+
       <section className="recipe-card" aria-live="polite">
         {!recipe ? (
-          <div className="recipe-placeholder">
-            <p>
-              Add <strong>one flavor</strong> and <strong>one liquid base</strong>{' '}
-              to unlock a recipe.
-            </p>
-          </div>
+          <p className="empty recipe-wait">Recipe appears when the pour is ready.</p>
         ) : (
           <>
             <h3 className="drink-name">{recipe.name}</h3>
@@ -69,13 +70,13 @@ export function RecipePanel({ selected, recipe, onRemove, onClear }: Props) {
             <ul className="measure-list">
               {recipe.ingredients.map((line) => (
                 <li key={line.ingredientId}>
-                  <span>{line.quantity}</span>
                   <span>{line.name}</span>
+                  <span>{line.quantity}</span>
                 </li>
               ))}
             </ul>
 
-            <h4>Instructions</h4>
+            <h4>Method</h4>
             <ol className="steps">
               {recipe.instructions.map((step, i) => (
                 <li key={i}>{step}</li>

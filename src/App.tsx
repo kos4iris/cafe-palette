@@ -38,22 +38,12 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <div className="bg-blobs" aria-hidden>
-        <span className="blob blob-a" />
-        <span className="blob blob-b" />
-        <span className="blob blob-c" />
-      </div>
-
+    <div className={`app theme-${drinkType}`}>
       <header className="topbar">
         <div className="brand">
-          <span className="brand-mark" aria-hidden>
-            🎨
-          </span>
-          <div>
-            <h1>Cafe Palette</h1>
-            <p>Paint a drink. Taste the recipe.</p>
-          </div>
+          <p className="brand-kicker">atelier</p>
+          <h1>Cafe Palette</h1>
+          <p className="brand-sub">compose a drink · read the recipe</p>
         </div>
         <DrinkTypeSelector
           value={drinkType}
@@ -67,6 +57,7 @@ function App() {
           <MixingCanvas
             pantry={INGREDIENTS}
             inGlass={selected}
+            drinkType={drinkType}
             onAdd={addIngredient}
             onRemove={removeIngredient}
             isDragOver={isDragOver}

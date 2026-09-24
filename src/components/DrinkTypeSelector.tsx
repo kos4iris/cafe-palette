@@ -15,10 +15,9 @@ export function DrinkTypeSelector({ value, onChange, options }: DrinkTypeProps) 
           type="button"
           role="radio"
           aria-checked={value === opt.id}
-          className={value === opt.id ? 'type-pill active' : 'type-pill'}
+          className={value === opt.id ? 'type-link active' : 'type-link'}
           onClick={() => onChange(opt.id)}
         >
-          <span aria-hidden>{opt.emoji}</span>
           {opt.label}
         </button>
       ))}

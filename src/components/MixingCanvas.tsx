@@ -1,33 +1,39 @@
-import type { Ingredient } from '../types';
+import type { DrinkType, Ingredient } from '../types';
 import { blendDrinkColors } from '../utils/recipeEngine';
 
-/** Organic scatter around the glass — percent of the stage. */
-const SCATTER: { top: string; left: string; rotate: string; size: 'sm' | 'md' | 'lg' }[] = [
-  { top: '6%', left: '42%', rotate: '-8deg', size: 'md' },
-  { top: '10%', left: '18%', rotate: '12deg', size: 'lg' },
-  { top: '8%', left: '68%', rotate: '-14deg', size: 'md' },
-  { top: '22%', left: '4%', rotate: '6deg', size: 'md' },
-  { top: '20%', left: '82%', rotate: '-4deg', size: 'lg' },
-  { top: '38%', left: '0%', rotate: '16deg', size: 'sm' },
-  { top: '36%', left: '88%', rotate: '-10deg', size: 'md' },
-  { top: '52%', left: '6%', rotate: '-18deg', size: 'lg' },
-  { top: '50%', left: '86%', rotate: '8deg', size: 'sm' },
-  { top: '68%', left: '2%', rotate: '4deg', size: 'md' },
-  { top: '66%', left: '90%', rotate: '-12deg', size: 'lg' },
-  { top: '78%', left: '14%', rotate: '14deg', size: 'sm' },
-  { top: '80%', left: '74%', rotate: '-6deg', size: 'md' },
-  { top: '88%', left: '32%', rotate: '10deg', size: 'md' },
-  { top: '86%', left: '54%', rotate: '-16deg', size: 'lg' },
-  { top: '14%', left: '50%', rotate: '5deg', size: 'sm' },
-  { top: '58%', left: '-2%', rotate: '-8deg', size: 'md' },
-  { top: '30%', left: '94%', rotate: '18deg', size: 'sm' },
-  { top: '72%', left: '42%', rotate: '-3deg', size: 'sm' },
-  { top: '44%', left: '78%', rotate: '11deg', size: 'md' },
+/** Sparse, menu-like placement around the vessel. */
+const SCATTER: {
+  top: string;
+  left: string;
+  rotate: string;
+  size: 'sm' | 'md' | 'lg';
+}[] = [
+  { top: '4%', left: '38%', rotate: '-6deg', size: 'md' },
+  { top: '8%', left: '14%', rotate: '10deg', size: 'lg' },
+  { top: '6%', left: '72%', rotate: '-12deg', size: 'md' },
+  { top: '24%', left: '2%', rotate: '4deg', size: 'md' },
+  { top: '22%', left: '86%', rotate: '-3deg', size: 'lg' },
+  { top: '42%', left: '-1%', rotate: '14deg', size: 'sm' },
+  { top: '40%', left: '90%', rotate: '-8deg', size: 'md' },
+  { top: '58%', left: '4%', rotate: '-14deg', size: 'lg' },
+  { top: '55%', left: '88%', rotate: '7deg', size: 'sm' },
+  { top: '74%', left: '8%', rotate: '3deg', size: 'md' },
+  { top: '72%', left: '84%', rotate: '-10deg', size: 'lg' },
+  { top: '84%', left: '22%', rotate: '11deg', size: 'sm' },
+  { top: '86%', left: '68%', rotate: '-5deg', size: 'md' },
+  { top: '90%', left: '42%', rotate: '8deg', size: 'md' },
+  { top: '16%', left: '52%', rotate: '2deg', size: 'sm' },
+  { top: '62%', left: '-2%', rotate: '-6deg', size: 'md' },
+  { top: '32%', left: '94%', rotate: '15deg', size: 'sm' },
+  { top: '78%', left: '48%', rotate: '-2deg', size: 'sm' },
+  { top: '48%', left: '78%', rotate: '9deg', size: 'md' },
+  { top: '12%', left: '28%', rotate: '-9deg', size: 'sm' },
 ];
 
 interface Props {
   pantry: Ingredient[];
   inGlass: Ingredient[];
+  drinkType: DrinkType;
   onAdd: (id: string) => void;
   onRemove: (id: string) => void;
   isDragOver: boolean;
@@ -37,13 +43,14 @@ interface Props {
 export function MixingCanvas({
   pantry,
   inGlass,
+  drinkType,
   onAdd,
   onRemove,
   isDragOver,
   setDragOver,
 }: Props) {
   const { layers, blended } = blendDrinkColors(inGlass);
-  const fillPercent = Math.min(18 + inGlass.length * 12, 88);
+  const fillPercent = Math.min(16 + inGlass.length * 11, 86);
   const inGlassIds = new Set(inGlass.map((i) => i.id));
 
   const layerGradient =
@@ -56,10 +63,14 @@ export function MixingCanvas({
             .join(', ')})`;
 
   return (
-    <div className="mixing-canvas">
+    <div className={`mixing-canvas halo-${drinkType}`}>
+      <div className="halo" aria-hidden />
+      <div className="halo-grain" aria-hidden />
+
       {pantry.map((ing, index) => {
         const pos = SCATTER[index % SCATTER.length];
         const used = inGlassIds.has(ing.id);
+        const num = String(index + 1).padStart(2, '0');
         return (
           <button
             key={ing.id}
@@ -70,7 +81,6 @@ export function MixingCanvas({
               left: pos.left,
               ['--pic-color' as string]: ing.color,
               ['--pic-rotate' as string]: pos.rotate,
-              animationDelay: `${index * 0.12}s`,
             }}
             draggable
             onDragStart={(e) => {
@@ -82,6 +92,9 @@ export function MixingCanvas({
             aria-pressed={used}
             title={ing.name}
           >
+            <span className="float-num" aria-hidden>
+              {num}
+            </span>
             <span className="float-pic-face" aria-hidden>
               {ing.emoji}
             </span>
@@ -113,31 +126,20 @@ export function MixingCanvas({
                 height: `${fillPercent}%`,
                 background:
                   layers.length > 1
-                    ? `linear-gradient(180deg, ${blended}ee, ${layerGradient})`
+                    ? `linear-gradient(180deg, ${blended}dd, ${layerGradient})`
                     : blended === 'transparent'
                       ? 'transparent'
-                      : `linear-gradient(180deg, ${blended}cc, ${blended})`,
+                      : `linear-gradient(180deg, ${blended}bb, ${blended})`,
               }}
-            >
-              {inGlass.length > 0 && (
-                <div className="bubbles" aria-hidden>
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </div>
-              )}
-            </div>
-
+            />
             <ul className="glass-bits">
               {inGlass.map((ing, index) => (
                 <li
                   key={ing.id}
                   className="glass-bit"
                   style={{
-                    left: `${18 + ((index * 17) % 58)}%`,
-                    bottom: `${12 + ((index * 13) % 50)}%`,
-                    animationDelay: `${index * 0.08}s`,
+                    left: `${20 + ((index * 19) % 52)}%`,
+                    bottom: `${14 + ((index * 15) % 46)}%`,
                   }}
                 >
                   <button
@@ -155,12 +157,6 @@ export function MixingCanvas({
           </div>
           <div className="glass-shine" aria-hidden />
         </div>
-
-        <p className="drop-hint">
-          {inGlass.length === 0
-            ? 'Drag a picture into the glass'
-            : 'Tap a bit in the glass to remove it'}
-        </p>
       </div>
     </div>
   );
