@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito:wght@500;600;700;800&display=swap');
+
+:root {
+  --ink: #1f2a24;
+  --ink-soft: #4a5c52;
+  --paper: #fff9f2;
+  --panel: rgba(255, 252, 247, 0.82);
+  --stroke: rgba(31, 42, 36, 0.1);
+  --accent: #ff6b4a;
+  --accent-2: #2ec4b6;
+  --accent-3: #ffb703;
+  --mint: #b8f2e6;
+  --peach: #ffd6c0;
+  --sky: #c9e8ff;
+  --shadow: 0 18px 40px rgba(31, 42, 36, 0.12);
+  --radius: 22px;
+  font-family: 'Nunito', system-ui, sans-serif;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #ffe8d6 0%, transparent 55%),
+    radial-gradient(900px 500px at 90% 0%, #d8fff4 0%, transparent 50%),
+    radial-gradient(700px 400px at 70% 100%, #dceeff 0%, transparent 45%),
+    linear-gradient(165deg, #fff6eb 0%, #f3fff9 48%, #eef7ff 100%);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+p {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
