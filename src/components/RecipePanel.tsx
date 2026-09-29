@@ -117,16 +117,26 @@ function AiRecipeView({ recipe }: { recipe: DrinkRecipe }) {
       <ul className="measure-list">
         {recipe.ingredients.map((line, i) => (
           <li key={`${line.name}-${i}`}>
-            <span>{line.name}</span>
+            <span>
+              {line.name}
+              {!line.userSelected && <span className="added-tag">added</span>}
+            </span>
             <span>{line.amount}</span>
           </li>
         ))}
       </ul>
 
+      {recipe.equipment.length > 0 && (
+        <>
+          <h4>Equipment</h4>
+          <p className="equipment">{recipe.equipment.join(' · ')}</p>
+        </>
+      )}
+
       <h4>Method</h4>
       <ol className="steps">
-        {recipe.instructions.map((step, i) => (
-          <li key={i}>{step}</li>
+        {recipe.instructions.map((step) => (
+          <li key={step.step}>{step.instruction}</li>
         ))}
       </ol>
 
@@ -134,6 +144,21 @@ function AiRecipeView({ recipe }: { recipe: DrinkRecipe }) {
         <>
           <h4>Garnish</h4>
           <p className="garnish">{recipe.garnish}</p>
+        </>
+      )}
+
+      {recipe.sources.length > 0 && (
+        <>
+          <h4>Sources</h4>
+          <ul className="sources">
+            {recipe.sources.map((source) => (
+              <li key={source.url}>
+                <a href={source.url} target="_blank" rel="noreferrer noopener">
+                  {source.title}
+                </a>
+              </li>
+            ))}
+          </ul>
         </>
       )}
     </>

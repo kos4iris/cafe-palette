@@ -24,6 +24,19 @@ export interface GenerateDrinkRequest {
 export interface RecipeIngredient {
   name: string;
   amount: string;
+  /** False when Gemini added it to balance the drink. */
+  userSelected: boolean;
+}
+
+export interface RecipeStep {
+  step: number;
+  instruction: string;
+}
+
+/** A web page the grounded research step actually cited. */
+export interface RecipeSource {
+  title: string;
+  url: string;
 }
 
 /** Structured recipe returned to the frontend. */
@@ -31,6 +44,8 @@ export interface DrinkRecipe {
   name: string;
   description: string;
   ingredients: RecipeIngredient[];
-  instructions: string[];
+  equipment: string[];
+  instructions: RecipeStep[];
   garnish: string;
+  sources: RecipeSource[];
 }

@@ -3,6 +3,18 @@ import type { DrinkType, Sweetness, Temperature } from '../types';
 export interface DrinkRecipeIngredient {
   name: string;
   amount: string;
+  /** False when Gemini added it to balance the drink. */
+  userSelected: boolean;
+}
+
+export interface DrinkRecipeStep {
+  step: number;
+  instruction: string;
+}
+
+export interface DrinkRecipeSource {
+  title: string;
+  url: string;
 }
 
 /** Recipe returned by POST /api/generate-drink. */
@@ -10,8 +22,10 @@ export interface DrinkRecipe {
   name: string;
   description: string;
   ingredients: DrinkRecipeIngredient[];
-  instructions: string[];
+  equipment: string[];
+  instructions: DrinkRecipeStep[];
   garnish: string;
+  sources: DrinkRecipeSource[];
 }
 
 export interface GenerateDrinkInput {
@@ -22,7 +36,8 @@ export interface GenerateDrinkInput {
 }
 
 const GENERIC_ERROR = "We couldn't mix that drink right now. Please try again.";
-const REQUEST_TIMEOUT_MS = 45_000;
+// Generous: the backend may make a grounded research call before composing.
+const REQUEST_TIMEOUT_MS = 70_000;
 
 /** Thrown with a message that is safe to show to the user. */
 export class DrinkApiError extends Error {}
@@ -76,11 +91,19 @@ function isDrinkRecipe(data: unknown): data is DrinkRecipe {
     typeof r.name === 'string' &&
     typeof r.description === 'string' &&
     typeof r.garnish === 'string' &&
+    Array.isArray(r.equipment) &&
+    r.equipment.every((e) => typeof e === 'string') &&
     Array.isArray(r.instructions) &&
-    r.instructions.every((s) => typeof s === 'string') &&
+    r.instructions.every(
+      (s) => typeof s?.step === 'number' && typeof s?.instruction === 'string',
+    ) &&
     Array.isArray(r.ingredients) &&
     r.ingredients.every(
       (i) => typeof i?.name === 'string' && typeof i?.amount === 'string',
+    ) &&
+    Array.isArray(r.sources) &&
+    r.sources.every(
+      (s) => typeof s?.title === 'string' && typeof s?.url === 'string',
     )
   );
 }
