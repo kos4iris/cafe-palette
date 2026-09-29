@@ -1,33 +1,38 @@
 import type { DrinkType, Ingredient } from '../types';
 import { blendDrinkColors } from '../utils/recipeEngine';
 
-/** Sparse, menu-like placement around the vessel. */
+/**
+ * Sparse, menu-like ring around the vessel. `top`/`left` are element centres
+ * and steer clear of the glass zone (x 36–64%, y 30–80%).
+ */
 const SCATTER: {
   top: string;
   left: string;
   rotate: string;
   size: 'sm' | 'md' | 'lg';
 }[] = [
-  { top: '4%', left: '38%', rotate: '-6deg', size: 'md' },
-  { top: '8%', left: '14%', rotate: '10deg', size: 'lg' },
-  { top: '6%', left: '72%', rotate: '-12deg', size: 'md' },
-  { top: '24%', left: '2%', rotate: '4deg', size: 'md' },
-  { top: '22%', left: '86%', rotate: '-3deg', size: 'lg' },
-  { top: '42%', left: '-1%', rotate: '14deg', size: 'sm' },
-  { top: '40%', left: '90%', rotate: '-8deg', size: 'md' },
-  { top: '58%', left: '4%', rotate: '-14deg', size: 'lg' },
-  { top: '55%', left: '88%', rotate: '7deg', size: 'sm' },
-  { top: '74%', left: '8%', rotate: '3deg', size: 'md' },
-  { top: '72%', left: '84%', rotate: '-10deg', size: 'lg' },
-  { top: '84%', left: '22%', rotate: '11deg', size: 'sm' },
-  { top: '86%', left: '68%', rotate: '-5deg', size: 'md' },
-  { top: '90%', left: '42%', rotate: '8deg', size: 'md' },
-  { top: '16%', left: '52%', rotate: '2deg', size: 'sm' },
-  { top: '62%', left: '-2%', rotate: '-6deg', size: 'md' },
-  { top: '32%', left: '94%', rotate: '15deg', size: 'sm' },
-  { top: '78%', left: '48%', rotate: '-2deg', size: 'sm' },
-  { top: '48%', left: '78%', rotate: '9deg', size: 'md' },
-  { top: '12%', left: '28%', rotate: '-9deg', size: 'sm' },
+  { top: '11%', left: '11%', rotate: '-7deg', size: 'lg' },
+  { top: '27%', left: '8%', rotate: '9deg', size: 'lg' },
+  { top: '43%', left: '9%', rotate: '-4deg', size: 'md' },
+  { top: '59%', left: '8%', rotate: '12deg', size: 'sm' },
+  { top: '74%', left: '11%', rotate: '-10deg', size: 'lg' },
+  { top: '88%', left: '15%', rotate: '5deg', size: 'md' },
+  { top: '9%', left: '89%', rotate: '8deg', size: 'lg' },
+  { top: '25%', left: '92%', rotate: '-6deg', size: 'lg' },
+  { top: '41%', left: '92%', rotate: '14deg', size: 'sm' },
+  { top: '57%', left: '91%', rotate: '-3deg', size: 'md' },
+  { top: '72%', left: '89%', rotate: '10deg', size: 'sm' },
+  { top: '87%', left: '84%', rotate: '-8deg', size: 'md' },
+  { top: '7%', left: '31%', rotate: '6deg', size: 'md' },
+  { top: '10%', left: '45%', rotate: '-11deg', size: 'sm' },
+  { top: '7%', left: '59%', rotate: '3deg', size: 'sm' },
+  { top: '91%', left: '32%', rotate: '-5deg', size: 'sm' },
+  { top: '93%', left: '46%', rotate: '9deg', size: 'sm' },
+  { top: '90%', left: '60%', rotate: '-2deg', size: 'md' },
+  { top: '19%', left: '23%', rotate: '11deg', size: 'sm' },
+  { top: '18%', left: '76%', rotate: '-9deg', size: 'sm' },
+  { top: '82%', left: '25%', rotate: '4deg', size: 'sm' },
+  { top: '84%', left: '73%', rotate: '-13deg', size: 'sm' },
 ];
 
 interface Props {
@@ -68,18 +73,26 @@ export function MixingCanvas({
       <div className="halo-grain" aria-hidden />
 
       {pantry.map((ing, index) => {
-        const pos = SCATTER[index % SCATTER.length];
+        // Spread a small pantry evenly around the ring instead of bunching it up.
+        const stride = Math.max(1, Math.floor(SCATTER.length / pantry.length));
+        const pos = SCATTER[(index * stride) % SCATTER.length];
         const used = inGlassIds.has(ing.id);
         const num = String(index + 1).padStart(2, '0');
         return (
           <button
             key={ing.id}
             type="button"
-            className={`float-pic float-${pos.size}${used ? ' used' : ''}`}
+            className={[
+              'float-pic',
+              `float-${pos.size}`,
+              ing.art ? 'has-art' : '',
+              used ? 'used' : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
             style={{
               top: pos.top,
               left: pos.left,
-              ['--pic-color' as string]: ing.color,
               ['--pic-rotate' as string]: pos.rotate,
             }}
             draggable
@@ -95,9 +108,13 @@ export function MixingCanvas({
             <span className="float-num" aria-hidden>
               {num}
             </span>
-            <span className="float-pic-face" aria-hidden>
-              {ing.emoji}
-            </span>
+            {ing.art ? (
+              <img className="float-art" src={ing.art} alt="" draggable={false} />
+            ) : (
+              <span className="float-pic-face" aria-hidden>
+                {ing.emoji}
+              </span>
+            )}
           </button>
         );
       })}
@@ -149,7 +166,11 @@ export function MixingCanvas({
                     aria-label={`Remove ${ing.name}`}
                     title={`Remove ${ing.name}`}
                   >
-                    {ing.emoji}
+                    {ing.art ? (
+                      <img className="bit-art" src={ing.art} alt="" />
+                    ) : (
+                      ing.emoji
+                    )}
                   </button>
                 </li>
               ))}

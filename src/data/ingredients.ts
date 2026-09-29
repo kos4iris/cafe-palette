@@ -1,3 +1,8 @@
+import cherryArt from '../assets/ingredients/cherry.png';
+import lemonArt from '../assets/ingredients/lemon.png';
+import mangoArt from '../assets/ingredients/mango.png';
+import orangeArt from '../assets/ingredients/orange.png';
+import strawberryArt from '../assets/ingredients/strawberry.png';
 import type { Ingredient } from '../types';
 
 const ALL: Ingredient['compatibleDrinkTypes'] = [
@@ -14,6 +19,7 @@ export const INGREDIENTS: Ingredient[] = [
     id: 'strawberry',
     name: 'Strawberry',
     emoji: '🍓',
+    art: strawberryArt,
     category: 'fruit',
     compatibleDrinkTypes: ALL,
     flavorProfile: ['sweet', 'berry', 'bright'],
@@ -24,6 +30,7 @@ export const INGREDIENTS: Ingredient[] = [
     id: 'mango',
     name: 'Mango',
     emoji: '🥭',
+    art: mangoArt,
     category: 'fruit',
     compatibleDrinkTypes: ALL,
     flavorProfile: ['sweet', 'tropical', 'rich'],
@@ -54,6 +61,7 @@ export const INGREDIENTS: Ingredient[] = [
     id: 'lemon',
     name: 'Lemon',
     emoji: '🍋',
+    art: lemonArt,
     category: 'fruit',
     compatibleDrinkTypes: ['refresher', 'tea', 'mocktail', 'sparkling'],
     flavorProfile: ['citrus', 'tart', 'bright'],
@@ -76,6 +84,35 @@ export const INGREDIENTS: Ingredient[] = [
     flavorProfile: ['citrus', 'tart', 'zesty'],
     color: '#a8e05f',
     isCitrus: true,
+    isFlavor: true,
+  },
+  {
+    id: 'orange',
+    name: 'Orange',
+    emoji: '🍊',
+    art: orangeArt,
+    category: 'fruit',
+    compatibleDrinkTypes: [
+      'refresher',
+      'tea',
+      'mocktail',
+      'sparkling',
+      'smoothie',
+    ],
+    flavorProfile: ['citrus', 'sweet', 'juicy'],
+    color: '#f0943c',
+    isCitrus: true,
+    isFlavor: true,
+  },
+  {
+    id: 'cherry',
+    name: 'Cherry',
+    emoji: '🍒',
+    art: cherryArt,
+    category: 'fruit',
+    compatibleDrinkTypes: ALL,
+    flavorProfile: ['sweet', 'stonefruit', 'deep'],
+    color: '#b3202f',
     isFlavor: true,
   },
   {

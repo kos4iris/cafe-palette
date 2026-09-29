@@ -7,6 +7,10 @@ import { DRINK_TYPES, type DrinkType } from './types';
 import { generateRecipe } from './utils/recipeEngine';
 import './App.css';
 
+// Only ingredients with hand-drawn art are shown on the board for now.
+// The rest stay in INGREDIENTS and return automatically once they get `art`.
+const PANTRY = INGREDIENTS.filter((i) => i.art);
+
 function App() {
   const [drinkType, setDrinkType] = useState<DrinkType>('refresher');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -55,7 +59,7 @@ function App() {
       <main className="workspace">
         <section className="center-stage">
           <MixingCanvas
-            pantry={INGREDIENTS}
+            pantry={PANTRY}
             inGlass={selected}
             drinkType={drinkType}
             onAdd={addIngredient}

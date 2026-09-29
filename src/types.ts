@@ -17,6 +17,8 @@ export interface Ingredient {
   id: string;
   name: string;
   emoji: string;
+  /** Hand-drawn artwork; falls back to the emoji when absent */
+  art?: string;
   category: IngredientCategory;
   compatibleDrinkTypes: DrinkType[];
   flavorProfile: string[];

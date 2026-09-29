@@ -35,7 +35,12 @@ export function RecipePanel({ selected, recipe, onRemove, onClear }: Props) {
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <span className="menu-item-name">
-                  <span aria-hidden>{ing.emoji}</span> {ing.name}
+                  {ing.art ? (
+                    <img className="menu-thumb" src={ing.art} alt="" />
+                  ) : (
+                    <span aria-hidden>{ing.emoji}</span>
+                  )}{' '}
+                  {ing.name}
                 </span>
                 <button
                   type="button"
