@@ -1,13 +1,31 @@
+import type { ReactNode } from 'react';
+import type { DrinkRecipe } from '../services/drinkApi';
 import type { GeneratedRecipe, Ingredient } from '../types';
 
 interface Props {
   selected: Ingredient[];
+  /** Rule-based recipe, shown when no generated recipe is available. */
   recipe: GeneratedRecipe | null;
+  /** Recipe from the backend for the current selection, if any. */
+  aiRecipe: DrinkRecipe | null;
+  isGenerating: boolean;
+  error: string | null;
   onRemove: (id: string) => void;
   onClear: () => void;
+  /** Preference controls, rendered between the ingredient list and the recipe. */
+  children?: ReactNode;
 }
 
-export function RecipePanel({ selected, recipe, onRemove, onClear }: Props) {
+export function RecipePanel({
+  selected,
+  recipe,
+  aiRecipe,
+  isGenerating,
+  error,
+  onRemove,
+  onClear,
+  children,
+}: Props) {
   return (
     <aside className="menu-panel">
       <header className="menu-header">
@@ -56,40 +74,99 @@ export function RecipePanel({ selected, recipe, onRemove, onClear }: Props) {
         )}
       </section>
 
+      {children}
+
       <div className="menu-rule" aria-hidden />
 
       <section className="recipe-card" aria-live="polite">
-        {!recipe ? (
-          <p className="empty recipe-wait">Recipe appears when the pour is ready.</p>
+        {isGenerating ? (
+          <p className="empty recipe-wait mixing">Mixing your drink...</p>
         ) : (
           <>
-            <h3 className="drink-name">{recipe.name}</h3>
-
-            {recipe.unusual && recipe.unusualMessage && (
-              <p className="unusual-note" role="status">
-                {recipe.unusualMessage}
+            {error && (
+              <p className="error-note" role="alert">
+                {error}
               </p>
             )}
 
-            <h4>Ingredients</h4>
-            <ul className="measure-list">
-              {recipe.ingredients.map((line) => (
-                <li key={line.ingredientId}>
-                  <span>{line.name}</span>
-                  <span>{line.quantity}</span>
-                </li>
-              ))}
-            </ul>
-
-            <h4>Method</h4>
-            <ol className="steps">
-              {recipe.instructions.map((step, i) => (
-                <li key={i}>{step}</li>
-              ))}
-            </ol>
+            {aiRecipe ? (
+              <AiRecipeView recipe={aiRecipe} />
+            ) : recipe ? (
+              <RuleRecipeView recipe={recipe} />
+            ) : (
+              !error && (
+                <p className="empty recipe-wait">
+                  Choose your ingredients, then press Generate My Drink.
+                </p>
+              )
+            )}
           </>
         )}
       </section>
     </aside>
+  );
+}
+
+function AiRecipeView({ recipe }: { recipe: DrinkRecipe }) {
+  return (
+    <>
+      <h3 className="drink-name">{recipe.name}</h3>
+      <p className="drink-desc">{recipe.description}</p>
+
+      <h4>Ingredients</h4>
+      <ul className="measure-list">
+        {recipe.ingredients.map((line, i) => (
+          <li key={`${line.name}-${i}`}>
+            <span>{line.name}</span>
+            <span>{line.amount}</span>
+          </li>
+        ))}
+      </ul>
+
+      <h4>Method</h4>
+      <ol className="steps">
+        {recipe.instructions.map((step, i) => (
+          <li key={i}>{step}</li>
+        ))}
+      </ol>
+
+      {recipe.garnish.toLowerCase() !== 'none' && (
+        <>
+          <h4>Garnish</h4>
+          <p className="garnish">{recipe.garnish}</p>
+        </>
+      )}
+    </>
+  );
+}
+
+function RuleRecipeView({ recipe }: { recipe: GeneratedRecipe }) {
+  return (
+    <>
+      <h3 className="drink-name">{recipe.name}</h3>
+
+      {recipe.unusual && recipe.unusualMessage && (
+        <p className="unusual-note" role="status">
+          {recipe.unusualMessage}
+        </p>
+      )}
+
+      <h4>Ingredients</h4>
+      <ul className="measure-list">
+        {recipe.ingredients.map((line) => (
+          <li key={line.ingredientId}>
+            <span>{line.name}</span>
+            <span>{line.quantity}</span>
+          </li>
+        ))}
+      </ul>
+
+      <h4>Method</h4>
+      <ol className="steps">
+        {recipe.instructions.map((step, i) => (
+          <li key={i}>{step}</li>
+        ))}
+      </ol>
+    </>
   );
 }

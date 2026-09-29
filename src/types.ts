@@ -46,6 +46,20 @@ export interface GeneratedRecipe {
   unusualMessage?: string;
 }
 
+export type Temperature = 'iced' | 'hot';
+export type Sweetness = 'low' | 'medium' | 'high';
+
+export const TEMPERATURES: { id: Temperature; label: string }[] = [
+  { id: 'iced', label: 'Iced' },
+  { id: 'hot', label: 'Hot' },
+];
+
+export const SWEETNESS_LEVELS: { id: Sweetness; label: string }[] = [
+  { id: 'low', label: 'Low' },
+  { id: 'medium', label: 'Medium' },
+  { id: 'high', label: 'High' },
+];
+
 export const DRINK_TYPES: { id: DrinkType; label: string; emoji: string }[] = [
   { id: 'refresher', label: 'Refresher', emoji: '🧊' },
   { id: 'smoothie', label: 'Smoothie', emoji: '🥤' },

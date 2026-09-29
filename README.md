@@ -1,25 +1,68 @@
 # Cafe Palette
 
-A playful drink-mixing web app. Drag ingredient pictures into a glass, pick a drink style, and get a rule-based recipe — no backend or AI required.
+A playful drink-mixing web app. Drag ingredient pictures into a glass, pick a drink style, and press **Generate My Drink** to get a recipe written by Gemini.
 
 ## Stack
 
-- React + TypeScript
-- Vite
-- Plain CSS
+- Frontend: React + TypeScript + Vite + plain CSS
+- Backend: Node.js + Express + TypeScript (`backend/`)
+- AI: Google Gemini, called only from the backend
 
-## Run locally
+## Setup
 
 ```bash
+# frontend
 npm install
+
+# backend
+cd backend
+npm install
+cp .env.example .env   # then paste your key into backend/.env
+```
+
+Get a Gemini API key at https://aistudio.google.com/apikey and put it in `backend/.env`:
+
+```
+GEMINI_API_KEY=your-key-here
+```
+
+`backend/.env` is git-ignored. The key never reaches the browser and there is no `VITE_` variable for it.
+
+## Run
+
+Use two terminals:
+
+```bash
+# terminal 1: API on http://localhost:3001
+cd backend
+npm run dev
+
+# terminal 2: app on http://localhost:5173
 npm run dev
 ```
 
-Open the URL Vite prints (usually `http://localhost:5173`).
+Open http://localhost:5173. Vite forwards `/api/*` to the backend.
 
 ## How it works
 
-1. Choose a drink style (Refresher, Smoothie, Tea, Latte, Mocktail, Sparkling).
-2. Drag (or click) the ingredient pictures around the glass into the glass.
-3. When you have at least one flavor + one liquid base, a recipe appears on the right.
-4. Unusual combos still work — you'll just see a gentle note.
+1. Drag or click ingredient pictures into the glass, then choose drink style, temperature and sweetness.
+2. **Generate My Drink** sends `POST /api/generate-drink` with the selection.
+3. The backend validates the request and asks Gemini for one structured recipe.
+4. The recipe is validated again and shown in the menu panel.
+
+### API
+
+`POST /api/generate-drink`
+
+```json
+{
+  "ingredients": ["strawberry", "matcha", "oat milk"],
+  "drinkType": "latte",
+  "temperature": "iced",
+  "sweetness": "medium"
+}
+```
+
+Returns `{ name, description, ingredients: [{ name, amount }], instructions, garnish }`, or `{ error }` with a 400 (bad request), 503 (no API key configured) or 502 (Gemini failed).
+
+Optional `backend/.env` settings: `GEMINI_MODEL` (default `gemini-3.5-flash-lite`) and `PORT` (default `3001`).
