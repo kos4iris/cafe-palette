@@ -21,6 +21,7 @@ export interface DrinkRecipeSource {
 /** Recipe returned by POST /api/generate-drink. */
 export interface DrinkRecipe {
   name: string;
+  nameType: 'established' | 'descriptive' | 'creative';
   description: string;
   ingredients: DrinkRecipeIngredient[];
   equipment: string[];
@@ -97,6 +98,7 @@ function isDrinkRecipe(data: unknown): data is DrinkRecipe {
   return (
     typeof r.name === 'string' &&
     typeof r.description === 'string' &&
+    (r.nameType === 'established' || r.nameType === 'descriptive' || r.nameType === 'creative') &&
     Array.isArray(r.equipment) &&
     r.equipment.every((e) => typeof e === 'string') &&
     Array.isArray(r.instructions) &&

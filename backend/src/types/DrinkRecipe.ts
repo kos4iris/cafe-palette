@@ -53,6 +53,8 @@ export interface RecipeSource {
 /** Structured recipe returned to the frontend. */
 export interface DrinkRecipe {
   name: string;
+  /** established when the name matches a known style, descriptive for flavor plus style, creative when neither fits. */
+  nameType: 'established' | 'descriptive' | 'creative';
   description: string;
   ingredients: RecipeIngredient[];
   equipment: string[];
