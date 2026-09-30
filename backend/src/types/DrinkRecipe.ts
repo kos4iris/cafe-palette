@@ -30,6 +30,14 @@ export interface GenerateDrinkRequest {
   /** How many drinks to write the recipe for. */
   servings: number;
   compatibility?: CompatibilityNote;
+  /** The last few drinks made from this same ingredient selection. */
+  recentRecipes?: RecentRecipe[];
+}
+
+export interface RecentRecipe {
+  name: string;
+  drinkCategory: DrinkRecipe['drinkCategory'];
+  mainIngredients: string[];
 }
 
 export interface RecipeIngredient {

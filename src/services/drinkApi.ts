@@ -51,6 +51,13 @@ export interface GenerateDrinkInput {
   sweetness: Sweetness;
   servings: number;
   compatibility?: CompatibilityResult;
+  recentRecipes?: RecentDrink[];
+}
+
+export interface RecentDrink {
+  name: string;
+  drinkCategory: DrinkRecipe['drinkCategory'];
+  mainIngredients: string[];
 }
 
 const GENERIC_ERROR = "We couldn't mix that drink right now. Please try again.";

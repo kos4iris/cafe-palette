@@ -8,6 +8,7 @@ import {
   SWEETNESS_LEVELS,
   TEMPERATURES,
   type GenerateDrinkRequest,
+  type RecentRecipe,
 } from '../types/DrinkRecipe.js';
 
 const MAX_INGREDIENTS = 12;
@@ -78,6 +79,7 @@ function parseRequest(body: unknown): ParseResult {
       sweetness,
       servings,
       compatibility: parseCompatibility(input.compatibility),
+      recentRecipes: parseRecentRecipes(input.recentRecipes),
     },
   };
 }
@@ -107,6 +109,46 @@ function parseServings(value: unknown): number | null {
   const n = typeof value === 'number' ? value : Number(value);
   if (!Number.isInteger(n) || n < 1 || n > 12) return null;
   return n;
+}
+
+function parseRecentRecipes(value: unknown): RecentRecipe[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const recipes: RecentRecipe[] = [];
+  for (const item of value.slice(-3)) {
+    if (typeof item !== 'object' || item === null) continue;
+    const row = item as Record<string, unknown>;
+    const name = shortText(row.name, 80);
+    const drinkCategory = isDrinkCategory(row.drinkCategory) ? row.drinkCategory : undefined;
+    if (!name || !drinkCategory) continue;
+    const mainIngredients = Array.isArray(row.mainIngredients)
+      ? row.mainIngredients.flatMap((entry) => {
+          const ingredient = typeof entry === 'string' ? entry.trim() : '';
+          return INGREDIENT_PATTERN.test(ingredient) ? [ingredient.slice(0, 40)] : [];
+        })
+      : [];
+    recipes.push({
+      name,
+      drinkCategory,
+      mainIngredients: mainIngredients.slice(0, 8),
+    });
+  }
+  return recipes.length > 0 ? recipes : undefined;
+}
+
+const DRINK_CATEGORIES = [
+  'lemonade',
+  'latte',
+  'iced tea',
+  'smoothie',
+  'milk tea',
+  'tonic',
+  'soda',
+  'lassi',
+  'other',
+] as const;
+
+function isDrinkCategory(value: unknown): value is RecentRecipe['drinkCategory'] {
+  return typeof value === 'string' && (DRINK_CATEGORIES as readonly string[]).includes(value);
 }
 
 function shortText(value: unknown, max: number): string | undefined {

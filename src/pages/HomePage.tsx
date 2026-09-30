@@ -1,10 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { GenerateControls } from '../components/GenerateControls';
 import { MixingCanvas } from '../components/MixingCanvas';
 import { RecipePanel } from '../components/RecipePanel';
 import { SelectedBubbles } from '../components/SelectedBubbles';
 import { getIngredientById } from '../data/ingredients';
-import { generateDrink, type DrinkRecipe } from '../services/drinkApi';
+import { generateDrink, type DrinkRecipe, type RecentDrink } from '../services/drinkApi';
 import { type Sweetness, type Temperature } from '../types';
 import { useIngredientCompatibility } from '../hooks/useIngredientCompatibility';
 import { inferDrinkType } from '../utils/recipeEngine';
@@ -19,6 +19,7 @@ export default function HomePage() {
   const [isGenerating, setGenerating] = useState(false);
   const [result, setResult] = useState<{ key: string; recipe: DrinkRecipe } | null>(null);
   const [failure, setFailure] = useState<{ key: string; message: string } | null>(null);
+  const recentRecipes = useRef(new Map<string, RecentDrink[]>());
 
   const selected = useMemo(
     () =>
@@ -47,6 +48,8 @@ export default function HomePage() {
     if (selected.length < 1 || isGenerating) return;
 
     const key = inputKey;
+    const selectionKey = JSON.stringify([...selectedIds].sort());
+    const recent = recentRecipes.current.get(selectionKey) ?? [];
     setGenerating(true);
     setResult(null);
     setFailure(null);
@@ -59,8 +62,10 @@ export default function HomePage() {
         sweetness,
         servings,
         ...(compatibility ? { compatibility } : {}),
+        ...(recent.length > 0 ? { recentRecipes: recent } : {}),
       });
       setResult({ key, recipe });
+      recentRecipes.current.set(selectionKey, rememberRecipe(recent, recipe));
     } catch (err) {
       setFailure({
         key,
@@ -137,4 +142,16 @@ export default function HomePage() {
       </main>
     </div>
   );
+}
+
+function rememberRecipe(recent: RecentDrink[], recipe: DrinkRecipe): RecentDrink[] {
+  const next = [
+    ...recent,
+    {
+      name: recipe.name,
+      drinkCategory: recipe.drinkCategory,
+      mainIngredients: recipe.ingredients.slice(0, 6).map((item) => item.name.toLowerCase()),
+    },
+  ];
+  return next.slice(-3);
 }

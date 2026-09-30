@@ -365,6 +365,18 @@ function extractSources(response: unknown): RecipeSource[] {
   return sources;
 }
 
+function recentVarietyNote(request: GenerateDrinkRequest): string {
+  const recent = request.recentRecipes;
+  if (!recent?.length) return '';
+  return [
+    'The user recently generated the following drinks with this same ingredient selection:',
+    JSON.stringify(recent, null, 2),
+    'Create a recipe that is noticeably different from these recent results.',
+    'Avoid repeating the same drink category, main supporting ingredients, or overall flavor direction too soon.',
+    'It is okay for older recipes to appear again later. The goal is short-term variety, not permanent uniqueness.',
+  ].join('\n');
+}
+
 function compatibilityNote(request: GenerateDrinkRequest): string {
   const note = request.compatibility;
   if (!note || note.status === 'good' || !note.reason) return '';
@@ -408,6 +420,7 @@ export async function generateDrinkRecipe(
       ? `\nResearch from real recipes. Use it for technique, proportions, flavor pairing, and preparation style. Do not copy it verbatim:\n${research.notes}`
       : '',
     compatibilityNote(request),
+    recentVarietyNote(request),
   ]
     .filter(Boolean)
     .join('\n');
