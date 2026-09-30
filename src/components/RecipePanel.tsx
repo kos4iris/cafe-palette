@@ -1,12 +1,10 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import type { DrinkRecipe } from '../services/drinkApi';
-import type { GeneratedRecipe, Ingredient } from '../types';
+import type { Ingredient } from '../types';
 import { findSavedRecipeId, saveRecipe } from '../utils/savedRecipes';
 
 interface Props {
   selected: Ingredient[];
-  /** Rule-based recipe, shown when no generated recipe is available. */
-  recipe: GeneratedRecipe | null;
   /** Recipe from the backend for the current selection, if any. */
   aiRecipe: DrinkRecipe | null;
   isGenerating: boolean;
@@ -19,7 +17,6 @@ interface Props {
 
 export function RecipePanel({
   selected,
-  recipe,
   aiRecipe,
   isGenerating,
   error,
@@ -87,8 +84,6 @@ export function RecipePanel({
 
             {aiRecipe ? (
               <AiRecipeView recipe={aiRecipe} />
-            ) : recipe ? (
-              <RuleRecipeView recipe={recipe} />
             ) : (
               !error && (
                 <p className="empty recipe-wait">Your recipe will show up here.</p>
@@ -192,35 +187,3 @@ function AiRecipeView({ recipe }: { recipe: DrinkRecipe }) {
   );
 }
 
-function RuleRecipeView({ recipe }: { recipe: GeneratedRecipe }) {
-  return (
-    <>
-      <h3 className="drink-name">{recipe.name}</h3>
-
-      {recipe.unusual && recipe.unusualMessage && (
-        <p className="unusual-note" role="status">
-          {recipe.unusualMessage}
-        </p>
-      )}
-
-      <h4>Ingredients</h4>
-      <ul className="measure-list">
-        {recipe.ingredients.map((line) => (
-          <li key={line.ingredientId}>
-            <span>{line.name}</span>
-            <span>{line.quantity}</span>
-          </li>
-        ))}
-      </ul>
-
-      <section className="recipe-block">
-        <h4>Procedure</h4>
-        <ol className="steps">
-          {recipe.instructions.map((step, i) => (
-            <li key={i}>{step}</li>
-          ))}
-        </ol>
-      </section>
-    </>
-  );
-}

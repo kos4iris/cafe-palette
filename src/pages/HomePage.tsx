@@ -5,7 +5,7 @@ import { RecipePanel } from '../components/RecipePanel';
 import { getIngredientById } from '../data/ingredients';
 import { generateDrink, type DrinkRecipe } from '../services/drinkApi';
 import { type Sweetness, type Temperature } from '../types';
-import { generateRecipe, inferDrinkType } from '../utils/recipeEngine';
+import { inferDrinkType } from '../utils/recipeEngine';
 
 export default function HomePage() {
   const [temperature, setTemperature] = useState<Temperature>('iced');
@@ -26,11 +26,6 @@ export default function HomePage() {
   );
 
   const drinkType = useMemo(() => inferDrinkType(selected), [selected]);
-
-  const recipe = useMemo(
-    () => generateRecipe(selected, drinkType),
-    [selected, drinkType],
-  );
 
   // A generated recipe only describes the inputs it was made from. When any of
   // them change, it stops matching this key and is hidden rather than misleading.
@@ -119,7 +114,6 @@ export default function HomePage() {
 
         <RecipePanel
           selected={selected}
-          recipe={recipe}
           aiRecipe={aiRecipe}
           isGenerating={isGenerating}
           error={aiError}
