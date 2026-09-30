@@ -54,7 +54,7 @@ function App() {
   const aiError = failure?.key === inputKey ? failure.message : null;
 
   async function handleGenerate() {
-    if (selected.length === 0 || isGenerating) return;
+    if (selected.length < 3 || isGenerating) return;
 
     const key = inputKey;
     setGenerating(true);
@@ -96,30 +96,42 @@ function App() {
 
   return (
     <div className={`app theme-${drinkType}`}>
-      <header className="topbar">
-        <div className="brand">
-          <p className="brand-kicker">atelier</p>
-          <h1>Cafe Palette</h1>
-          <p className="brand-sub">compose a drink · read the recipe</p>
-        </div>
-        <DrinkTypeSelector
-          value={drinkType}
-          onChange={setDrinkType}
-          options={DRINK_TYPES}
-        />
-      </header>
-
       <main className="workspace">
-        <section className="center-stage">
-          <MixingCanvas
-            pantry={PANTRY}
-            inGlass={selected}
-            drinkType={drinkType}
-            onAdd={addIngredient}
-            onRemove={removeIngredient}
-            isDragOver={isDragOver}
-            setDragOver={setDragOver}
-          />
+        <section className="stage">
+          <p className="instructions">
+            drag and drop any selection of at least 3 ingredients for a yummy drink
+            recipe
+          </p>
+          <div className="poster">
+          <header className="brand">
+            <h1>
+              <span className="brand-line">
+                <span className="brand-cap">C</span>afe
+              </span>
+              <span className="brand-line brand-palette">
+                <span className="brand-cap">P</span>alette
+                <span className="brand-stars" aria-hidden>
+                  <i />
+                  <i />
+                  <i />
+                </span>
+              </span>
+            </h1>
+            <p className="brand-atelier">Atelier</p>
+          </header>
+
+          <div className="board">
+            <MixingCanvas
+              pantry={PANTRY}
+              inGlass={selected}
+              drinkType={drinkType}
+              onAdd={addIngredient}
+              onRemove={removeIngredient}
+              isDragOver={isDragOver}
+              setDragOver={setDragOver}
+            />
+          </div>
+          </div>
         </section>
 
         <RecipePanel
@@ -131,12 +143,17 @@ function App() {
           onRemove={removeIngredient}
           onClear={clearAll}
         >
+          <DrinkTypeSelector
+            value={drinkType}
+            onChange={setDrinkType}
+            options={DRINK_TYPES}
+          />
           <GenerateControls
             temperature={temperature}
             sweetness={sweetness}
             onTemperature={setTemperature}
             onSweetness={setSweetness}
-            canGenerate={selected.length > 0}
+            canGenerate={selected.length >= 3}
             isGenerating={isGenerating}
             onGenerate={handleGenerate}
           />

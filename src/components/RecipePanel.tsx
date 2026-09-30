@@ -43,7 +43,7 @@ export function RecipePanel({
       <section className="current-list" aria-label="Current ingredients">
         {selected.length === 0 ? (
           <p className="empty">
-            Drag pictures into the glass — one flavor, one base.
+            Add at least 3 ingredients.
           </p>
         ) : (
           <ul className="menu-index">
