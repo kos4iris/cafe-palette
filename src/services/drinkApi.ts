@@ -22,6 +22,16 @@ export interface DrinkRecipeSource {
 export interface DrinkRecipe {
   name: string;
   nameType: 'established' | 'descriptive' | 'creative';
+  drinkCategory:
+    | 'lemonade'
+    | 'latte'
+    | 'iced tea'
+    | 'smoothie'
+    | 'milk tea'
+    | 'tonic'
+    | 'soda'
+    | 'lassi'
+    | 'other';
   description: string;
   ingredients: DrinkRecipeIngredient[];
   equipment: string[];
@@ -99,6 +109,15 @@ function isDrinkRecipe(data: unknown): data is DrinkRecipe {
     typeof r.name === 'string' &&
     typeof r.description === 'string' &&
     (r.nameType === 'established' || r.nameType === 'descriptive' || r.nameType === 'creative') &&
+    (r.drinkCategory === 'lemonade' ||
+      r.drinkCategory === 'latte' ||
+      r.drinkCategory === 'iced tea' ||
+      r.drinkCategory === 'smoothie' ||
+      r.drinkCategory === 'milk tea' ||
+      r.drinkCategory === 'tonic' ||
+      r.drinkCategory === 'soda' ||
+      r.drinkCategory === 'lassi' ||
+      r.drinkCategory === 'other') &&
     Array.isArray(r.equipment) &&
     r.equipment.every((e) => typeof e === 'string') &&
     Array.isArray(r.instructions) &&

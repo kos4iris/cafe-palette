@@ -55,6 +55,16 @@ export interface DrinkRecipe {
   name: string;
   /** established when the name matches a known style, descriptive for flavor plus style, creative when neither fits. */
   nameType: 'established' | 'descriptive' | 'creative';
+  drinkCategory:
+    | 'lemonade'
+    | 'latte'
+    | 'iced tea'
+    | 'smoothie'
+    | 'milk tea'
+    | 'tonic'
+    | 'soda'
+    | 'lassi'
+    | 'other';
   description: string;
   ingredients: RecipeIngredient[];
   equipment: string[];
