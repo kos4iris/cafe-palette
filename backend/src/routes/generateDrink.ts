@@ -64,7 +64,16 @@ function parseRequest(body: unknown): ParseResult {
     return { ok: false, error: `sweetness must be one of: ${SWEETNESS_LEVELS.join(', ')}.` };
   }
 
-  return { ok: true, value: { ingredients, drinkType, temperature, sweetness } };
+  return {
+    ok: true,
+    value: {
+      ingredients,
+      drinkType,
+      temperature,
+      sweetness,
+      compatibility: parseCompatibility(input.compatibility),
+    },
+  };
 }
 
 function isOneOf<T extends string>(
@@ -72,6 +81,25 @@ function isOneOf<T extends string>(
   value: unknown,
 ): value is T {
   return typeof value === 'string' && (allowed as readonly string[]).includes(value);
+}
+
+const COMPATIBILITY_STATUSES = ['good', 'unusual', 'problematic'] as const;
+
+function parseCompatibility(value: unknown) {
+  if (typeof value !== 'object' || value === null) return undefined;
+  const note = value as Record<string, unknown>;
+  if (!isOneOf(COMPATIBILITY_STATUSES, note.status)) return undefined;
+  return {
+    status: note.status,
+    reason: shortText(note.reason, 240),
+    suggestion: shortText(note.suggestion, 180),
+  };
+}
+
+function shortText(value: unknown, max: number): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  return trimmed ? trimmed.slice(0, max) : undefined;
 }
 
 export const generateDrinkRouter = Router();

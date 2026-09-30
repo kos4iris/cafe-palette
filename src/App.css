@@ -8,7 +8,7 @@
 .stage {
   position: relative;
   min-width: 0;
-  min-height: 820px;
+  min-height: 1040px;
 }
 
 .poster {
@@ -91,6 +91,127 @@
   line-height: 1.35;
   color: #314368;
   pointer-events: none;
+}
+
+.selected-tray {
+  --ink: #051060;
+  --ink-soft: #4574ab;
+  --line: rgba(69, 116, 171, 0.4);
+  position: absolute;
+  z-index: 6;
+  top: 189px;
+  right: calc(1.25rem - 50px);
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.selected-bubbles {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.selected-bubble {
+  position: relative;
+  width: 4.7rem;
+  height: 4.7rem;
+  border: 1px solid rgba(69, 116, 171, 0.45);
+  background: rgba(248, 241, 231, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selected-bubble img {
+  width: 3.15rem;
+  height: 3.15rem;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.selected-emoji {
+  font-size: 1.85rem;
+  line-height: 1;
+}
+
+.bubble-remove {
+  position: absolute;
+  top: 0.05rem;
+  right: 0.2rem;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #4574ab;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.bubble-remove:hover {
+  color: #051060;
+}
+
+.menu-panel .recipe-summary {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: none;
+  border-top: 1px solid var(--line);
+  background: transparent;
+  padding: 1.2rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #314368;
+}
+
+.summary-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  margin: 0;
+}
+
+.summary-label {
+  font-size: 0.64rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #4574ab;
+}
+
+.summary-value {
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #051060;
+}
+
+.summary-stars {
+  display: flex;
+  gap: 0.12rem;
+  font-size: 0.95rem;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.summary-stars .is-on {
+  color: #051060;
+}
+
+.summary-stars .is-off {
+  color: rgba(69, 116, 171, 0.35);
 }
 
 .type-link {
@@ -254,7 +375,7 @@
   left: 50%;
   width: 542px;
   height: 580px;
-  transform: translateX(calc(-50% + 65px));
+  transform: translateX(calc(-50% + 50px));
 }
 
 .glass-dropzone {
@@ -450,6 +571,35 @@
   font-size: 0.85rem;
   font-weight: 300;
   font-style: italic;
+}
+
+.compat {
+  margin-top: 0.95rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+  font-weight: 300;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: #314368;
+}
+
+.compat-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4574ab;
+}
+
+.compat-problematic .compat-label {
+  color: #051060;
+}
+
+.compat-suggestion {
+  display: block;
+  margin-top: 0.3rem;
+  color: #4574ab;
 }
 
 .measure-list {

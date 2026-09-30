@@ -1,4 +1,5 @@
 import type { DrinkType, Sweetness, Temperature } from '../types';
+import type { CompatibilityResult } from '../utils/checkIngredientCompatibility';
 
 export interface DrinkRecipeIngredient {
   name: string;
@@ -24,6 +25,10 @@ export interface DrinkRecipe {
   ingredients: DrinkRecipeIngredient[];
   equipment: string[];
   instructions: DrinkRecipeStep[];
+  prepTime: string;
+  servings: number;
+  /** 1 is easiest, 5 is the most involved. */
+  difficulty: number;
   sources: DrinkRecipeSource[];
 }
 
@@ -32,6 +37,7 @@ export interface GenerateDrinkInput {
   drinkType: DrinkType;
   temperature: Temperature;
   sweetness: Sweetness;
+  compatibility?: CompatibilityResult;
 }
 
 const GENERIC_ERROR = "We couldn't mix that drink right now. Please try again.";
@@ -102,6 +108,9 @@ function isDrinkRecipe(data: unknown): data is DrinkRecipe {
     Array.isArray(r.sources) &&
     r.sources.every(
       (s) => typeof s?.title === 'string' && typeof s?.url === 'string',
-    )
+    ) &&
+    typeof r.prepTime === 'string' &&
+    typeof r.servings === 'number' &&
+    typeof r.difficulty === 'number'
   );
 }

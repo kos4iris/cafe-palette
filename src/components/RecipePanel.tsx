@@ -1,27 +1,25 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import type { DrinkRecipe } from '../services/drinkApi';
-import type { Ingredient } from '../types';
+import type { CompatibilityResult } from '../utils/checkIngredientCompatibility';
 import { findSavedRecipeId, saveRecipe } from '../utils/savedRecipes';
+import { CompatibilityNote } from './CompatibilityNote';
+import { RecipeSummary } from './RecipeSummary';
 
 interface Props {
-  selected: Ingredient[];
   /** Recipe from the backend for the current selection, if any. */
   aiRecipe: DrinkRecipe | null;
   isGenerating: boolean;
   error: string | null;
-  onRemove: (id: string) => void;
-  onClear: () => void;
-  /** Preference controls, rendered between the selection and the recipe. */
+  compatibility: CompatibilityResult | null;
+  /** Preference controls, rendered above the recipe. */
   children?: ReactNode;
 }
 
 export function RecipePanel({
-  selected,
   aiRecipe,
   isGenerating,
   error,
-  onRemove,
-  onClear,
+  compatibility,
   children,
 }: Props) {
   return (
@@ -30,45 +28,11 @@ export function RecipePanel({
         <h2>Menu</h2>
       </header>
 
-      <section className="menu-section" aria-label="Selected ingredients">
-        <div className="recipe-title-row">
-          <h3 className="menu-section-label">Selected</h3>
-          {selected.length > 0 && (
-            <button type="button" className="text-btn" onClick={onClear}>
-              clear
-            </button>
-          )}
-        </div>
-        {selected.length === 0 ? (
-          <p className="empty">Add at least 3 ingredients.</p>
-        ) : (
-          <ul className="menu-index">
-            {selected.map((ing, i) => (
-              <li key={ing.id}>
-                <span className="menu-idx">{String(i + 1).padStart(2, '0')}</span>
-                <span className="menu-item-name">
-                  {ing.art ? (
-                    <img className="menu-thumb" src={ing.art} alt="" />
-                  ) : (
-                    <span aria-hidden>{ing.emoji}</span>
-                  )}{' '}
-                  {ing.name}
-                </span>
-                <button
-                  type="button"
-                  className="remove-btn"
-                  onClick={() => onRemove(ing.id)}
-                  aria-label={`Remove ${ing.name}`}
-                >
-                  ×
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      <CompatibilityNote result={compatibility} />
 
       {children}
+
+      <RecipeSummary recipe={aiRecipe} />
 
       <section className="menu-section recipe-card" aria-live="polite">
         <h3 className="menu-section-label recipe-label">Recipe</h3>

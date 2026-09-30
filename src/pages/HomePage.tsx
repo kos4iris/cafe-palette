@@ -2,9 +2,11 @@ import { useMemo, useState } from 'react';
 import { GenerateControls } from '../components/GenerateControls';
 import { MixingCanvas } from '../components/MixingCanvas';
 import { RecipePanel } from '../components/RecipePanel';
+import { SelectedBubbles } from '../components/SelectedBubbles';
 import { getIngredientById } from '../data/ingredients';
 import { generateDrink, type DrinkRecipe } from '../services/drinkApi';
 import { type Sweetness, type Temperature } from '../types';
+import { useIngredientCompatibility } from '../hooks/useIngredientCompatibility';
 import { inferDrinkType } from '../utils/recipeEngine';
 
 export default function HomePage() {
@@ -26,6 +28,7 @@ export default function HomePage() {
   );
 
   const drinkType = useMemo(() => inferDrinkType(selected), [selected]);
+  const compatibility = useIngredientCompatibility(selected);
 
   // A generated recipe only describes the inputs it was made from. When any of
   // them change, it stops matching this key and is hidden rather than misleading.
@@ -52,6 +55,7 @@ export default function HomePage() {
         drinkType,
         temperature,
         sweetness,
+        ...(compatibility ? { compatibility } : {}),
       });
       setResult({ key, recipe });
     } catch (err) {
@@ -73,10 +77,6 @@ export default function HomePage() {
 
   function removeIngredient(id: string) {
     setSelectedIds((prev) => prev.filter((x) => x !== id));
-  }
-
-  function clearAll() {
-    setSelectedIds([]);
   }
 
   return (
@@ -110,15 +110,14 @@ export default function HomePage() {
               />
             </div>
           </div>
+          <SelectedBubbles selected={selected} onRemove={removeIngredient} />
         </section>
 
         <RecipePanel
-          selected={selected}
           aiRecipe={aiRecipe}
           isGenerating={isGenerating}
           error={aiError}
-          onRemove={removeIngredient}
-          onClear={clearAll}
+          compatibility={compatibility}
         >
           <GenerateControls
             temperature={temperature}

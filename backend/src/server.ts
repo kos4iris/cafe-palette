@@ -5,6 +5,7 @@ import express, {
   type Response,
 } from 'express';
 import { fileURLToPath } from 'node:url';
+import { checkCompatibilityRouter } from './routes/checkCompatibility.js';
 import { generateDrinkRouter } from './routes/generateDrink.js';
 
 // Load backend/.env no matter which directory the server is started from
@@ -25,6 +26,7 @@ app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ ok: true });
 });
 app.use('/api/generate-drink', generateDrinkRouter);
+app.use('/api/check-compatibility', checkCompatibilityRouter);
 
 const onError: ErrorRequestHandler = (err, _req, res, next) => {
   if (res.headersSent) {

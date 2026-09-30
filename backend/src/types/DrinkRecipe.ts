@@ -13,12 +13,21 @@ export type DrinkType = (typeof DRINK_TYPES)[number];
 export type Temperature = (typeof TEMPERATURES)[number];
 export type Sweetness = (typeof SWEETNESS_LEVELS)[number];
 
+export type CompatibilityStatus = 'good' | 'unusual' | 'problematic';
+
+export interface CompatibilityNote {
+  status: CompatibilityStatus;
+  reason?: string;
+  suggestion?: string;
+}
+
 /** Validated body of POST /api/generate-drink. */
 export interface GenerateDrinkRequest {
   ingredients: string[];
   drinkType: DrinkType;
   temperature: Temperature;
   sweetness: Sweetness;
+  compatibility?: CompatibilityNote;
 }
 
 export interface RecipeIngredient {
@@ -46,5 +55,10 @@ export interface DrinkRecipe {
   ingredients: RecipeIngredient[];
   equipment: string[];
   instructions: RecipeStep[];
+  /** Active time, such as "8 min". */
+  prepTime: string;
+  servings: number;
+  /** 1 is easiest, 5 is the most involved. */
+  difficulty: number;
   sources: RecipeSource[];
 }
