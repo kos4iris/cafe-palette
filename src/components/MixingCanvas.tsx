@@ -1,3 +1,4 @@
+import emptyArt from '../assets/glass/empty.png';
 import tumblerArt from '../assets/glass/tumbler.png';
 import type { DrinkType, Ingredient } from '../types';
 
@@ -72,7 +73,11 @@ export function MixingCanvas({
         }}
       >
         <div className="glass" aria-label="Drink glass">
-          <img className="glass-layer" src={tumblerArt} alt="" />
+          <img
+            className="glass-layer"
+            src={inGlass.length > 0 ? tumblerArt : emptyArt}
+            alt=""
+          />
         </div>
       </div>
       </div>
