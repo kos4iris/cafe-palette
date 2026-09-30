@@ -18,7 +18,7 @@ function quantityFor(
   }
 
   if (category === 'sweetener') {
-    if (id === 'honey') return '1 tbsp';
+    if (id === 'honey' || id === 'maple-syrup') return '1 tbsp';
     return '1–2 tsp';
   }
 

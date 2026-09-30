@@ -32,6 +32,7 @@ Write exactly ONE realistic, one-serving drink recipe that a beginner could foll
 INGREDIENTS
 - The user's selected ingredients are the priority and must all appear.
 - You may add other ingredients when they improve flavour, texture or balance, or make the drink workable. Keep additions minimal and ordinary.
+- Mint and basil are not on the user's board. Add one only when it genuinely suits the drink, as an extra ingredient with userSelected false. Do not add an herb to every recipe.
 - Set userSelected true only for the user's own ingredients, false for anything you add.
 - Give every ingredient an exact amount with units (tsp, tbsp, cup, oz, ml, or a count such as "4 leaves").
 - Say when it matters whether fruit is fresh, frozen, peeled or sliced.

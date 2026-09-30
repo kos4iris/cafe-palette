@@ -172,6 +172,16 @@ export const INGREDIENTS: Ingredient[] = [
     isFlavor: true,
   },
   {
+    id: 'sugar',
+    name: 'Sugar',
+    emoji: '🍬',
+    category: 'sweetener',
+    compatibleDrinkTypes: ALL,
+    flavorProfile: ['sweet'],
+    color: '#f6f1e6',
+    isFlavor: true,
+  },
+  {
     id: 'brown-sugar',
     name: 'Brown sugar',
     emoji: '🟤',
@@ -179,6 +189,16 @@ export const INGREDIENTS: Ingredient[] = [
     compatibleDrinkTypes: ['tea', 'latte', 'smoothie', 'refresher'],
     flavorProfile: ['sweet', 'caramel'],
     color: '#b07d4f',
+    isFlavor: true,
+  },
+  {
+    id: 'maple-syrup',
+    name: 'Maple syrup',
+    emoji: '🍁',
+    category: 'sweetener',
+    compatibleDrinkTypes: ['latte', 'tea', 'smoothie', 'refresher'],
+    flavorProfile: ['sweet', 'maple', 'rich'],
+    color: '#c47a2c',
     isFlavor: true,
   },
   {
@@ -255,6 +275,39 @@ export const INGREDIENTS: Ingredient[] = [
     isLiquid: true,
   },
   {
+    id: 'energy-drink',
+    name: 'Energy drink',
+    emoji: '⚡',
+    category: 'base',
+    compatibleDrinkTypes: ['sparkling', 'refresher', 'mocktail'],
+    flavorProfile: ['sweet', 'bright', 'sharp'],
+    color: '#d6e84a',
+    isLiquid: true,
+    isFlavor: true,
+  },
+  {
+    id: 'coca-cola',
+    name: 'Coca-Cola',
+    emoji: '🥤',
+    category: 'base',
+    compatibleDrinkTypes: ['sparkling', 'refresher', 'mocktail'],
+    flavorProfile: ['sweet', 'caramel', 'spiced'],
+    color: '#5c2e1f',
+    isLiquid: true,
+    isFlavor: true,
+  },
+  {
+    id: 'sprite',
+    name: 'Sprite',
+    emoji: '🍋‍🟩',
+    category: 'base',
+    compatibleDrinkTypes: ['sparkling', 'refresher', 'mocktail'],
+    flavorProfile: ['sweet', 'citrus', 'crisp'],
+    color: '#e7f3c4',
+    isLiquid: true,
+    isFlavor: true,
+  },
+  {
     id: 'coconut-water',
     name: 'Coconut water',
     emoji: '🥥',
@@ -269,3 +322,27 @@ export const INGREDIENTS: Ingredient[] = [
 export function getIngredientById(id: string): Ingredient | undefined {
   return INGREDIENTS.find((i) => i.id === id);
 }
+
+/** Board groups. Ice and all-purpose syrups stay off the board. */
+export const SHELVES: { id: string; label: string; ids: string[] }[] = [
+  {
+    id: 'fruit',
+    label: 'Fruits',
+    ids: ['cherry', 'orange', 'mango', 'strawberry', 'lemon'],
+  },
+  {
+    id: 'base',
+    label: 'Bases',
+    ids: ['milk', 'sparkling-water', 'coca-cola', 'sprite'],
+  },
+  {
+    id: 'caffeine',
+    label: 'Caffeine',
+    ids: ['green-tea', 'black-tea', 'matcha', 'coffee', 'energy-drink'],
+  },
+  {
+    id: 'sweetener',
+    label: 'Sweeteners',
+    ids: ['honey', 'sugar', 'brown-sugar', 'maple-syrup'],
+  },
+];

@@ -163,6 +163,35 @@
   background: transparent;
 }
 
+.shelf-tabs {
+  position: absolute;
+  z-index: 8;
+  top: 400px;
+  left: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.shelf-tab {
+  border: none;
+  background: transparent;
+  padding: 0 0 0.15rem;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4574ab;
+  cursor: pointer;
+}
+
+.shelf-tab.active {
+  color: #051060;
+  box-shadow: inset 0 -1px 0 #051060;
+}
+
 .float-pic {
   position: absolute;
   z-index: 4;
@@ -171,7 +200,18 @@
   background: transparent;
   cursor: grab;
   display: block;
+  text-align: center;
   transition: opacity 0.25s ease;
+  animation: pop-out 0.42s ease;
+}
+
+@keyframes pop-out {
+  from {
+    transform: scale(0.64);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
 .float-pic:active {

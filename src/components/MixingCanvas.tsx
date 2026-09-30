@@ -7,6 +7,7 @@ import matchaGlass from '../assets/glass/matcha.png';
 import orangeGlass from '../assets/glass/orange.png';
 import strawberryGlass from '../assets/glass/strawberry.png';
 import tumblerArt from '../assets/glass/tumbler.png';
+import { SHELVES, getIngredientById } from '../data/ingredients';
 import type { DrinkType, Ingredient } from '../types';
 import { peekTintedTumbler, tintedTumbler } from '../utils/liquidTint';
 
@@ -20,17 +21,33 @@ const PAINTED: Record<string, string> = {
   strawberry: strawberryGlass,
 };
 
-/** Positions inside the centered cluster. Long side is about 120px. */
+/**
+ * Positions inside the centered cluster.
+ * Drawn fruit keeps its poster placement. Other shelves use the same arch:
+ * five icons share the fruit slots, four sit evenly along that curve.
+ */
 const PLACES: Record<string, { top: string; left: string; width: string }> = {
   cherry: { top: '86px', left: '0px', width: '117px' },
   orange: { top: '0px', left: '211px', width: '120px' },
   mango: { top: '90px', left: '406px', width: '120px' },
   strawberry: { top: '300px', left: '10px', width: '98px' },
   lemon: { top: '300px', left: '422px', width: '120px' },
+  milk: { top: '298px', left: '0px', width: '104px' },
+  'sparkling-water': { top: '42px', left: '81px', width: '104px' },
+  'coca-cola': { top: '42px', left: '349px', width: '104px' },
+  sprite: { top: '298px', left: '430px', width: '104px' },
+  'green-tea': { top: '86px', left: '6px', width: '104px' },
+  'black-tea': { top: '0px', left: '219px', width: '104px' },
+  matcha: { top: '90px', left: '414px', width: '104px' },
+  coffee: { top: '300px', left: '7px', width: '104px' },
+  'energy-drink': { top: '300px', left: '430px', width: '104px' },
+  honey: { top: '298px', left: '0px', width: '104px' },
+  sugar: { top: '42px', left: '81px', width: '104px' },
+  'brown-sugar': { top: '42px', left: '349px', width: '104px' },
+  'maple-syrup': { top: '298px', left: '430px', width: '104px' },
 };
 
 interface Props {
-  pantry: Ingredient[];
   inGlass: Ingredient[];
   drinkType: DrinkType;
   onAdd: (id: string) => void;
@@ -40,11 +57,15 @@ interface Props {
 }
 
 export function MixingCanvas({
-  pantry,
   inGlass,
   onAdd,
   setDragOver,
 }: Props) {
+  const [shelfId, setShelfId] = useState(SHELVES[0].id);
+  const shelf = SHELVES.find((item) => item.id === shelfId) ?? SHELVES[0];
+  const pantry = shelf.ids
+    .map((id) => getIngredientById(id))
+    .filter((item): item is Ingredient => Boolean(item));
   const inGlassIds = new Set(inGlass.map((i) => i.id));
   const first = inGlass[0];
   const painted = first ? PAINTED[first.id] : undefined;
@@ -72,16 +93,30 @@ export function MixingCanvas({
 
   return (
     <div className="mixing-canvas">
+      <div className="shelf-tabs" role="tablist" aria-label="Ingredient categories">
+        {SHELVES.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            role="tab"
+            className={item.id === shelf.id ? 'shelf-tab active' : 'shelf-tab'}
+            aria-selected={item.id === shelf.id}
+            onClick={() => setShelfId(item.id)}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
       <div className="cluster">
       {pantry.map((ing) => {
         const pos = PLACES[ing.id];
-        if (!pos || !ing.art) return null;
+        if (!pos) return null;
         const used = inGlassIds.has(ing.id);
         return (
           <button
-            key={ing.id}
+            key={`${shelf.id}-${ing.id}`}
             type="button"
-            className={['float-pic', used ? 'used' : ''].filter(Boolean).join(' ')}
+            className={['float-pic', 'pop', used ? 'used' : ''].filter(Boolean).join(' ')}
             style={{ top: pos.top, left: pos.left, width: pos.width }}
             draggable
             onDragStart={(e) => {
@@ -93,7 +128,13 @@ export function MixingCanvas({
             aria-pressed={used}
             title={ing.name}
           >
-            <img className="float-art" src={ing.art} alt="" draggable={false} />
+            {ing.art ? (
+              <img className="float-art" src={ing.art} alt="" draggable={false} />
+            ) : (
+              <span className="float-pic-face" style={{ fontSize: `calc(${pos.width} * 0.78)` }}>
+                {ing.emoji}
+              </span>
+            )}
           </button>
         );
       })}
