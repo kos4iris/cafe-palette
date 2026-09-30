@@ -24,7 +24,6 @@ export interface DrinkRecipe {
   ingredients: DrinkRecipeIngredient[];
   equipment: string[];
   instructions: DrinkRecipeStep[];
-  garnish: string;
   sources: DrinkRecipeSource[];
 }
 
@@ -90,7 +89,6 @@ function isDrinkRecipe(data: unknown): data is DrinkRecipe {
   return (
     typeof r.name === 'string' &&
     typeof r.description === 'string' &&
-    typeof r.garnish === 'string' &&
     Array.isArray(r.equipment) &&
     r.equipment.every((e) => typeof e === 'string') &&
     Array.isArray(r.instructions) &&

@@ -46,6 +46,5 @@ export interface DrinkRecipe {
   ingredients: RecipeIngredient[];
   equipment: string[];
   instructions: RecipeStep[];
-  garnish: string;
   sources: RecipeSource[];
 }

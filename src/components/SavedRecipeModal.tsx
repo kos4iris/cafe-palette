@@ -6,12 +6,6 @@ interface Props {
   onClose: () => void;
 }
 
-function hasText(value: string | null | undefined): value is string {
-  if (!value) return false;
-  const trimmed = value.trim();
-  return trimmed.length > 0 && trimmed.toLowerCase() !== 'none';
-}
-
 export function SavedRecipeModal({ recipe, onClose }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -84,13 +78,6 @@ export function SavedRecipeModal({ recipe, onClose }: Props) {
             <li key={step.step}>{step.instruction}</li>
           ))}
         </ol>
-
-        {hasText(recipe.garnish) && (
-          <>
-            <h3>Garnish</h3>
-            <p className="saved-card-desc">{recipe.garnish}</p>
-          </>
-        )}
 
         {sources.length > 0 && (
           <>

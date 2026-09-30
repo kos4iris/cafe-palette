@@ -14,7 +14,6 @@ export interface SavedRecipe {
   description: string;
   ingredients: DrinkRecipeIngredient[];
   instructions: DrinkRecipeStep[];
-  garnish?: string | null;
   equipment?: string[];
   sources?: DrinkRecipeSource[];
   savedAt: string;
@@ -101,7 +100,6 @@ export function saveRecipe(recipe: DrinkRecipe): SavedRecipe {
       step: step.step,
       instruction: step.instruction,
     })),
-    garnish: recipe.garnish.trim() ? recipe.garnish : null,
     equipment: [...recipe.equipment],
     sources: recipe.sources.map((source) => ({ ...source })),
     savedAt: new Date().toISOString(),
