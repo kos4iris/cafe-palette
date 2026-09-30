@@ -1,6 +1,24 @@
+import { useEffect, useState } from 'react';
+import cherryGlass from '../assets/glass/cherry.png';
 import emptyArt from '../assets/glass/empty.png';
+import lemonGlass from '../assets/glass/lemon.png';
+import mangoGlass from '../assets/glass/mango.png';
+import matchaGlass from '../assets/glass/matcha.png';
+import orangeGlass from '../assets/glass/orange.png';
+import strawberryGlass from '../assets/glass/strawberry.png';
 import tumblerArt from '../assets/glass/tumbler.png';
 import type { DrinkType, Ingredient } from '../types';
+import { peekTintedTumbler, tintedTumbler } from '../utils/liquidTint';
+
+/** Hand-painted fills. Anything else still falls back to a recolor of the red glass. */
+const PAINTED: Record<string, string> = {
+  cherry: cherryGlass,
+  lemon: lemonGlass,
+  mango: mangoGlass,
+  matcha: matchaGlass,
+  orange: orangeGlass,
+  strawberry: strawberryGlass,
+};
 
 /** Positions inside the centered cluster. Long side is about 120px. */
 const PLACES: Record<string, { top: string; left: string; width: string }> = {
@@ -28,6 +46,29 @@ export function MixingCanvas({
   setDragOver,
 }: Props) {
   const inGlassIds = new Set(inGlass.map((i) => i.id));
+  const first = inGlass[0];
+  const painted = first ? PAINTED[first.id] : undefined;
+  const firstColor = first?.color ?? null;
+  const [tint, setTint] = useState<{ color: string; url: string } | null>(null);
+
+  useEffect(() => {
+    if (!firstColor || painted) return;
+    let cancel = false;
+    void tintedTumbler(tumblerArt, firstColor).then((url) => {
+      if (!cancel) setTint({ color: firstColor, url });
+    });
+    return () => {
+      cancel = true;
+    };
+  }, [firstColor, painted]);
+
+  const cached = firstColor ? peekTintedTumbler(firstColor) : undefined;
+  const tinted =
+    cached ||
+    (tint && firstColor && tint.color.toLowerCase() === firstColor.toLowerCase()
+      ? tint.url
+      : tumblerArt);
+  const filledSrc = painted ?? tinted;
 
   return (
     <div className="mixing-canvas">
@@ -75,7 +116,7 @@ export function MixingCanvas({
         <div className="glass" aria-label="Drink glass">
           <img
             className="glass-layer"
-            src={inGlass.length > 0 ? tumblerArt : emptyArt}
+            src={inGlass.length > 0 ? filledSrc : emptyArt}
             alt=""
           />
         </div>

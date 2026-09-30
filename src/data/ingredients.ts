@@ -23,7 +23,7 @@ export const INGREDIENTS: Ingredient[] = [
     category: 'fruit',
     compatibleDrinkTypes: ALL,
     flavorProfile: ['sweet', 'berry', 'bright'],
-    color: '#e84a6f',
+    color: '#ea6f62',
     isFlavor: true,
   },
   {
@@ -65,7 +65,7 @@ export const INGREDIENTS: Ingredient[] = [
     category: 'fruit',
     compatibleDrinkTypes: ['refresher', 'tea', 'mocktail', 'sparkling'],
     flavorProfile: ['citrus', 'tart', 'bright'],
-    color: '#f7d046',
+    color: '#f3d7a3',
     isCitrus: true,
     isFlavor: true,
   },
