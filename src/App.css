@@ -58,27 +58,6 @@
   margin: 0;
 }
 
-.brand-star {
-  position: absolute;
-  left: calc(100% + 0.15rem);
-  top: 0.12em;
-  width: 0.72rem;
-  height: 0.72rem;
-  background: #051060;
-  clip-path: polygon(
-    50% 0%,
-    61% 35%,
-    98% 35%,
-    68% 57%,
-    79% 91%,
-    50% 70%,
-    21% 91%,
-    32% 57%,
-    2% 35%,
-    39% 35%
-  );
-}
-
 .brand-atelier {
   position: absolute;
   left: 470px;
@@ -275,7 +254,7 @@
   left: 50%;
   width: 542px;
   height: 580px;
-  transform: translateX(calc(-50% + 15px));
+  transform: translateX(calc(-50% + 65px));
 }
 
 .glass-dropzone {
