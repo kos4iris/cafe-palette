@@ -12,7 +12,7 @@ interface Props {
   error: string | null;
   onRemove: (id: string) => void;
   onClear: () => void;
-  /** Preference controls, rendered between the ingredient list and the recipe. */
+  /** Preference controls, rendered between the selection and the recipe. */
   children?: ReactNode;
 }
 
@@ -29,29 +29,25 @@ export function RecipePanel({
   return (
     <aside className="menu-panel">
       <header className="menu-header">
+        <h2>Menu</h2>
+      </header>
+
+      <section className="menu-section" aria-label="Selected ingredients">
         <div className="recipe-title-row">
-          <h2>Menu</h2>
+          <h3 className="menu-section-label">Selected</h3>
           {selected.length > 0 && (
             <button type="button" className="text-btn" onClick={onClear}>
               clear
             </button>
           )}
         </div>
-        <p className="menu-note">Selected ingredients & recipe</p>
-      </header>
-
-      <section className="current-list" aria-label="Current ingredients">
         {selected.length === 0 ? (
-          <p className="empty">
-            Add at least 3 ingredients.
-          </p>
+          <p className="empty">Add at least 3 ingredients.</p>
         ) : (
           <ul className="menu-index">
             {selected.map((ing, i) => (
               <li key={ing.id}>
-                <span className="menu-idx">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+                <span className="menu-idx">{String(i + 1).padStart(2, '0')}</span>
                 <span className="menu-item-name">
                   {ing.art ? (
                     <img className="menu-thumb" src={ing.art} alt="" />
@@ -76,9 +72,8 @@ export function RecipePanel({
 
       {children}
 
-      <div className="menu-rule" aria-hidden />
-
-      <section className="recipe-card" aria-live="polite">
+      <section className="menu-section recipe-card" aria-live="polite">
+        <h3 className="menu-section-label recipe-label">Recipe</h3>
         {isGenerating ? (
           <p className="empty recipe-wait mixing">Mixing your drink...</p>
         ) : (
@@ -95,9 +90,7 @@ export function RecipePanel({
               <RuleRecipeView recipe={recipe} />
             ) : (
               !error && (
-                <p className="empty recipe-wait">
-                  Choose your ingredients, then press Generate My Drink.
-                </p>
+                <p className="empty recipe-wait">Your recipe will show up here.</p>
               )
             )}
           </>
@@ -128,24 +121,23 @@ function AiRecipeView({ recipe }: { recipe: DrinkRecipe }) {
 
       {recipe.equipment.length > 0 && (
         <>
-          <h4>Equipment</h4>
-          <p className="equipment">{recipe.equipment.join(' · ')}</p>
+          <h4 className="equipment-label">Equipment</h4>
+          <ul className="equipment">
+            {recipe.equipment.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
         </>
       )}
 
-      <h4>Method</h4>
-      <ol className="steps">
-        {recipe.instructions.map((step) => (
-          <li key={step.step}>{step.instruction}</li>
-        ))}
-      </ol>
-
-      {recipe.garnish.toLowerCase() !== 'none' && (
-        <>
-          <h4>Garnish</h4>
-          <p className="garnish">{recipe.garnish}</p>
-        </>
-      )}
+      <section className="recipe-block">
+        <h4>Procedure</h4>
+        <ol className="steps">
+          {recipe.instructions.map((step) => (
+            <li key={step.step}>{step.instruction}</li>
+          ))}
+        </ol>
+      </section>
 
       {recipe.sources.length > 0 && (
         <>
@@ -186,12 +178,14 @@ function RuleRecipeView({ recipe }: { recipe: GeneratedRecipe }) {
         ))}
       </ul>
 
-      <h4>Method</h4>
-      <ol className="steps">
-        {recipe.instructions.map((step, i) => (
-          <li key={i}>{step}</li>
-        ))}
-      </ol>
+      <section className="recipe-block">
+        <h4>Procedure</h4>
+        <ol className="steps">
+          {recipe.instructions.map((step, i) => (
+            <li key={i}>{step}</li>
+          ))}
+        </ol>
+      </section>
     </>
   );
 }

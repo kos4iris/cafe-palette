@@ -8,7 +8,7 @@ import orangeGlass from '../assets/glass/orange.png';
 import strawberryGlass from '../assets/glass/strawberry.png';
 import tumblerArt from '../assets/glass/tumbler.png';
 import { SHELVES, getIngredientById } from '../data/ingredients';
-import type { DrinkType, Ingredient } from '../types';
+import type { Ingredient } from '../types';
 import { peekTintedTumbler, tintedTumbler } from '../utils/liquidTint';
 
 /** Hand-painted fills. Anything else still falls back to a recolor of the red glass. */
@@ -49,7 +49,6 @@ const PLACES: Record<string, { top: string; left: string; width: string }> = {
 
 interface Props {
   inGlass: Ingredient[];
-  drinkType: DrinkType;
   onAdd: (id: string) => void;
   onRemove: (id: string) => void;
   isDragOver: boolean;

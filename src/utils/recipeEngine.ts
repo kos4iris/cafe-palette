@@ -270,6 +270,20 @@ function buildInstructions(
   return steps;
 }
 
+/** Style used when the menu no longer asks the user to pick one. */
+export function inferDrinkType(ingredients: Ingredient[]): DrinkType {
+  const ids = new Set(ingredients.map((item) => item.id));
+  const has = (...keys: string[]) => keys.some((key) => ids.has(key));
+  const hasMilk = has('milk', 'oat-milk');
+  const hasTea = has('green-tea', 'black-tea', 'matcha');
+
+  if (has('coffee') || (hasMilk && has('matcha'))) return 'latte';
+  if (hasTea) return 'tea';
+  if (has('sparkling-water', 'sprite', 'coca-cola', 'energy-drink')) return 'sparkling';
+  if (hasMilk && ingredients.some((item) => item.category === 'fruit')) return 'smoothie';
+  return 'refresher';
+}
+
 export function canGenerateRecipe(ingredients: Ingredient[]): boolean {
   const hasFlavor = ingredients.some((i) => i.isFlavor && !i.isLiquid);
   const hasLiquid = ingredients.some((i) => i.isLiquid);

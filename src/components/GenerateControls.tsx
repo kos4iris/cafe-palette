@@ -25,7 +25,8 @@ export function GenerateControls({
   onGenerate,
 }: Props) {
   return (
-    <section className="generate" aria-label="Drink preferences">
+    <section className="generate menu-section" aria-label="Drink preferences">
+      <h3 className="menu-section-label">Preferences</h3>
       <div className="pref-row">
         <span className="pref-label" id="pref-temp">
           Temperature

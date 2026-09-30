@@ -1,21 +1,14 @@
 import { useMemo, useState } from 'react';
-import { DrinkTypeSelector } from './components/DrinkTypeSelector';
 import { GenerateControls } from './components/GenerateControls';
 import { MixingCanvas } from './components/MixingCanvas';
 import { RecipePanel } from './components/RecipePanel';
 import { getIngredientById } from './data/ingredients';
 import { generateDrink, type DrinkRecipe } from './services/drinkApi';
-import {
-  DRINK_TYPES,
-  type DrinkType,
-  type Sweetness,
-  type Temperature,
-} from './types';
-import { generateRecipe } from './utils/recipeEngine';
+import { type Sweetness, type Temperature } from './types';
+import { generateRecipe, inferDrinkType } from './utils/recipeEngine';
 import './App.css';
 
 function App() {
-  const [drinkType, setDrinkType] = useState<DrinkType>('refresher');
   const [temperature, setTemperature] = useState<Temperature>('iced');
   const [sweetness, setSweetness] = useState<Sweetness>('medium');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -32,6 +25,8 @@ function App() {
         .filter((i): i is NonNullable<typeof i> => Boolean(i)),
     [selectedIds],
   );
+
+  const drinkType = useMemo(() => inferDrinkType(selected), [selected]);
 
   const recipe = useMemo(
     () => generateRecipe(selected, drinkType),
@@ -91,7 +86,7 @@ function App() {
   }
 
   return (
-    <div className={`app theme-${drinkType}`}>
+    <div className="app">
       <main className="workspace">
         <section className="stage">
           <p className="instructions">
@@ -115,7 +110,6 @@ function App() {
           <div className="board">
             <MixingCanvas
               inGlass={selected}
-              drinkType={drinkType}
               onAdd={addIngredient}
               onRemove={removeIngredient}
               isDragOver={isDragOver}
@@ -134,11 +128,6 @@ function App() {
           onRemove={removeIngredient}
           onClear={clearAll}
         >
-          <DrinkTypeSelector
-            value={drinkType}
-            onChange={setDrinkType}
-            options={DRINK_TYPES}
-          />
           <GenerateControls
             temperature={temperature}
             sweetness={sweetness}
