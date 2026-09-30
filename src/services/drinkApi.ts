@@ -37,6 +37,7 @@ export interface GenerateDrinkInput {
   drinkType: DrinkType;
   temperature: Temperature;
   sweetness: Sweetness;
+  servings: number;
   compatibility?: CompatibilityResult;
 }
 

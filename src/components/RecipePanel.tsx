@@ -28,9 +28,9 @@ export function RecipePanel({
         <h2>Menu</h2>
       </header>
 
-      <CompatibilityNote result={compatibility} />
-
       {children}
+
+      <CompatibilityNote result={compatibility} />
 
       <RecipeSummary recipe={aiRecipe} />
 

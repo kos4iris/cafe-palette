@@ -85,7 +85,7 @@ OTHER
 - Keep the name short and appealing and the description to one sentence.
 - Do not include a garnish.
 - prepTime is the active time for one person, written like "5 min" or "12 min". Count waiting that is part of the method, such as steeping or blending.
-- servings is 1.
+- servings is the number in the request. Scale every ingredient amount and every measurement in the steps for that many servings. Do not write a one-serving recipe when more servings were requested.
 - difficulty is an integer from 1 to 5. Judge it from how many ingredients the drink uses, how much equipment it needs, how many steps it has, and how technical those steps are.
   1 is a pour or stir with very little equipment.
   2 is one simple extra action, such as squeezing citrus or steeping tea.
@@ -172,11 +172,11 @@ const RECIPE_SCHEMA = {
     },
     prepTime: {
       type: 'string',
-      description: 'Active prep time for one serving, such as "8 min".',
+      description: 'Active prep time for the requested servings, such as "8 min".',
     },
     servings: {
       type: 'integer',
-      description: 'Number of servings. Use 1.',
+      description: 'The serving count from the request.',
     },
     difficulty: {
       type: 'integer',
@@ -220,6 +220,7 @@ function describeRequest(request: GenerateDrinkRequest): string {
     `Drink style: ${request.drinkType}`,
     `Temperature: ${request.temperature}`,
     `Sweetness: ${request.sweetness}`,
+    `Servings: ${request.servings}`,
   ].join('\n');
 }
 
@@ -353,6 +354,7 @@ export async function generateDrinkRecipe(
   const recipe = parseRecipe(response.text);
   return {
     ...recipe,
+    servings: request.servings,
     ingredients: markUserSelected(recipe.ingredients, request.ingredients),
     sources: research?.sources ?? [],
   };
@@ -460,7 +462,7 @@ function normalize(value: string): string {
 function cleanServings(value: unknown): number {
   const n = typeof value === 'number' ? value : Number(value);
   if (!Number.isInteger(n) || n < 1) return 1;
-  return Math.min(n, 4);
+  return Math.min(n, 12);
 }
 
 /** Trust Gemini's 1–5 score, and fall back to a count of the work involved. */

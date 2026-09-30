@@ -64,6 +64,11 @@ function parseRequest(body: unknown): ParseResult {
     return { ok: false, error: `sweetness must be one of: ${SWEETNESS_LEVELS.join(', ')}.` };
   }
 
+  const servings = parseServings(input.servings);
+  if (servings === null) {
+    return { ok: false, error: 'servings must be a whole number from 1 to 12.' };
+  }
+
   return {
     ok: true,
     value: {
@@ -71,6 +76,7 @@ function parseRequest(body: unknown): ParseResult {
       drinkType,
       temperature,
       sweetness,
+      servings,
       compatibility: parseCompatibility(input.compatibility),
     },
   };
@@ -94,6 +100,13 @@ function parseCompatibility(value: unknown) {
     reason: shortText(note.reason, 240),
     suggestion: shortText(note.suggestion, 180),
   };
+}
+
+function parseServings(value: unknown): number | null {
+  if (value === undefined) return 1;
+  const n = typeof value === 'number' ? value : Number(value);
+  if (!Number.isInteger(n) || n < 1 || n > 12) return null;
+  return n;
 }
 
 function shortText(value: unknown, max: number): string | undefined {

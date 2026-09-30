@@ -8,18 +8,25 @@ import {
 interface Props {
   temperature: Temperature;
   sweetness: Sweetness;
+  servings: number;
   onTemperature: (t: Temperature) => void;
   onSweetness: (s: Sweetness) => void;
+  onServings: (n: number) => void;
   canGenerate: boolean;
   isGenerating: boolean;
   onGenerate: () => void;
 }
 
+const MIN_SERVINGS = 1;
+const MAX_SERVINGS = 12;
+
 export function GenerateControls({
   temperature,
   sweetness,
+  servings,
   onTemperature,
   onSweetness,
+  onServings,
   canGenerate,
   isGenerating,
   onGenerate,
@@ -65,6 +72,27 @@ export function GenerateControls({
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="pref-row">
+        <label className="pref-label" htmlFor="pref-servings">
+          Servings
+        </label>
+        <input
+          id="pref-servings"
+          className="servings-input"
+          type="number"
+          inputMode="numeric"
+          min={MIN_SERVINGS}
+          max={MAX_SERVINGS}
+          step={1}
+          value={servings}
+          onChange={(event) => {
+            const next = event.target.valueAsNumber;
+            if (!Number.isInteger(next)) return;
+            onServings(Math.min(MAX_SERVINGS, Math.max(MIN_SERVINGS, next)));
+          }}
+        />
       </div>
 
       <button

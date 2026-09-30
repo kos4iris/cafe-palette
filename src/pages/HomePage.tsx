@@ -12,6 +12,7 @@ import { inferDrinkType } from '../utils/recipeEngine';
 export default function HomePage() {
   const [temperature, setTemperature] = useState<Temperature>('iced');
   const [sweetness, setSweetness] = useState<Sweetness>('medium');
+  const [servings, setServings] = useState(1);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isDragOver, setDragOver] = useState(false);
 
@@ -37,6 +38,7 @@ export default function HomePage() {
     drinkType,
     temperature,
     sweetness,
+    servings,
   ]);
   const aiRecipe = result?.key === inputKey ? result.recipe : null;
   const aiError = failure?.key === inputKey ? failure.message : null;
@@ -55,6 +57,7 @@ export default function HomePage() {
         drinkType,
         temperature,
         sweetness,
+        servings,
         ...(compatibility ? { compatibility } : {}),
       });
       setResult({ key, recipe });
@@ -122,8 +125,10 @@ export default function HomePage() {
           <GenerateControls
             temperature={temperature}
             sweetness={sweetness}
+            servings={servings}
             onTemperature={setTemperature}
             onSweetness={setSweetness}
+            onServings={setServings}
             canGenerate={selected.length >= 3}
             isGenerating={isGenerating}
             onGenerate={handleGenerate}

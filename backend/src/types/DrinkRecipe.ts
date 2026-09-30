@@ -27,6 +27,8 @@ export interface GenerateDrinkRequest {
   drinkType: DrinkType;
   temperature: Temperature;
   sweetness: Sweetness;
+  /** How many drinks to write the recipe for. */
+  servings: number;
   compatibility?: CompatibilityNote;
 }
 

@@ -99,7 +99,7 @@
   --line: rgba(69, 116, 171, 0.4);
   position: absolute;
   z-index: 6;
-  top: 189px;
+  top: 248px;
   right: calc(1.25rem - 50px);
   width: auto;
   display: flex;
@@ -124,7 +124,8 @@
   width: 4.7rem;
   height: 4.7rem;
   border: 1px solid rgba(69, 116, 171, 0.45);
-  background: rgba(248, 241, 231, 0.72);
+  background: #f8f1e7;
+  opacity: 0.75;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -698,6 +699,23 @@
   gap: 0.15rem 0.85rem;
   min-width: 0;
   max-width: 100%;
+}
+
+.servings-input {
+  width: 4.25rem;
+  padding: 0.28rem 0.45rem;
+  border: 1px solid rgba(69, 116, 171, 0.45);
+  border-radius: 0;
+  background: transparent;
+  color: #051060;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.servings-input:focus {
+  outline: 1px solid #4574ab;
+  outline-offset: 1px;
 }
 
 .generate-btn {
