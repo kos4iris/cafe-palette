@@ -1,13 +1,13 @@
 import tumblerArt from '../assets/glass/tumbler.png';
 import type { DrinkType, Ingredient } from '../types';
 
-/** Pixel positions around the cup at (120, 350). Long side is about 150px. */
+/** Positions inside the centered cluster. Long side is about 120px. */
 const PLACES: Record<string, { top: string; left: string; width: string }> = {
-  cherry: { top: '300px', left: '50px', width: '147px' },
-  orange: { top: '228px', left: '223px', width: '150px' },
-  mango: { top: '290px', left: '410px', width: '150px' },
-  strawberry: { top: '560px', left: '58px', width: '122px' },
-  lemon: { top: '560px', left: '420px', width: '150px' },
+  cherry: { top: '86px', left: '0px', width: '117px' },
+  orange: { top: '0px', left: '211px', width: '120px' },
+  mango: { top: '90px', left: '406px', width: '120px' },
+  strawberry: { top: '300px', left: '10px', width: '98px' },
+  lemon: { top: '300px', left: '422px', width: '120px' },
 };
 
 interface Props {
@@ -30,6 +30,7 @@ export function MixingCanvas({
 
   return (
     <div className="mixing-canvas">
+      <div className="cluster">
       {pantry.map((ing) => {
         const pos = PLACES[ing.id];
         if (!pos || !ing.art) return null;
@@ -73,6 +74,7 @@ export function MixingCanvas({
         <div className="glass" aria-label="Drink glass">
           <img className="glass-layer" src={tumblerArt} alt="" />
         </div>
+      </div>
       </div>
     </div>
   );

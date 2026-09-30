@@ -47,29 +47,24 @@
 }
 
 .brand-line:not(.brand-palette) {
-  left: 61px;
-  top: 10px;
+  left: 161px;
+  top: 30px;
 }
 
 .brand-palette {
   position: absolute;
-  left: 230px;
-  top: 87px;
+  left: 330px;
+  top: 107px;
   margin: 0;
 }
 
-.brand-stars {
+.brand-star {
   position: absolute;
-  left: calc(100% - 0.1rem);
-  top: 0.08em;
-  width: 1.35rem;
-  height: 1rem;
-}
-
-.brand-stars i {
-  position: absolute;
-  display: block;
-  background: #8ea4d4;
+  left: calc(100% + 0.15rem);
+  top: 0.12em;
+  width: 0.72rem;
+  height: 0.72rem;
+  background: #051060;
   clip-path: polygon(
     50% 0%,
     61% 35%,
@@ -84,40 +79,17 @@
   );
 }
 
-.brand-stars i:nth-child(1) {
-  width: 0.46rem;
-  height: 0.46rem;
-  left: 0.42rem;
-  top: 0;
-}
-
-.brand-stars i:nth-child(2) {
-  width: 0.26rem;
-  height: 0.26rem;
-  left: 0;
-  top: 0.32rem;
-}
-
-.brand-stars i:nth-child(3) {
-  width: 0.18rem;
-  height: 0.18rem;
-  left: 0.82rem;
-  top: 0.42rem;
-  border-radius: 50%;
-  clip-path: none;
-}
-
 .brand-atelier {
   position: absolute;
-  left: 370px;
-  top: 153px;
+  left: 470px;
+  top: 173px;
   margin: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 24px;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.5em;
   text-transform: uppercase;
-  color: #051060;
+  color: #4574ab;
   white-space: nowrap;
 }
 
@@ -129,11 +101,11 @@
 .instructions {
   position: absolute;
   z-index: 4;
-  top: 127px;
-  left: 117px;
-  width: 20rem;
+  top: 248px;
+  left: 128px;
+  width: 14rem;
   margin: 0;
-  text-align: left;
+  text-align: center;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
   font-size: 18px;
@@ -266,10 +238,19 @@
   max-height: 6.6rem;
 }
 
+.cluster {
+  position: absolute;
+  top: 309px;
+  left: 50%;
+  width: 542px;
+  height: 580px;
+  transform: translateX(calc(-50% + 15px));
+}
+
 .glass-dropzone {
   position: absolute;
-  top: 279px;
-  left: 189px;
+  top: 110px;
+  left: 136px;
   width: auto;
   height: auto;
   transform: none;
@@ -282,7 +263,7 @@
 
 .glass {
   position: relative;
-  width: 241.5px;
+  width: 289.8px;
   aspect-ratio: 384 / 602;
 }
 

@@ -110,11 +110,7 @@ function App() {
               </span>
               <span className="brand-line brand-palette">
                 <span className="brand-cap">P</span>alette
-                <span className="brand-stars" aria-hidden>
-                  <i />
-                  <i />
-                  <i />
-                </span>
+                <span className="brand-star" aria-hidden />
               </span>
             </h1>
             <p className="brand-atelier">Atelier</p>
