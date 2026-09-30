@@ -44,7 +44,7 @@ export default function HomePage() {
   const aiError = failure?.key === inputKey ? failure.message : null;
 
   async function handleGenerate() {
-    if (selected.length < 3 || isGenerating) return;
+    if (selected.length < 1 || isGenerating) return;
 
     const key = inputKey;
     setGenerating(true);
@@ -87,7 +87,7 @@ export default function HomePage() {
       <main className="workspace">
         <section className="stage">
           <p className="instructions">
-            drag and drop any selection of at least 3 ingredients for a yummy drink
+            drag and drop any selection of ingredients for a yummy drink
             recipe
           </p>
           <div className="poster">
@@ -129,7 +129,7 @@ export default function HomePage() {
             onTemperature={setTemperature}
             onSweetness={setSweetness}
             onServings={setServings}
-            canGenerate={selected.length >= 3}
+            canGenerate={selected.length >= 1}
             isGenerating={isGenerating}
             onGenerate={handleGenerate}
           />
