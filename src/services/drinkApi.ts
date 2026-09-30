@@ -29,6 +29,7 @@ export interface DrinkRecipe {
   servings: number;
   /** 1 is easiest, 5 is the most involved. */
   difficulty: number;
+  difficultyLabel: string;
   sources: DrinkRecipeSource[];
 }
 
@@ -112,6 +113,7 @@ function isDrinkRecipe(data: unknown): data is DrinkRecipe {
     ) &&
     typeof r.prepTime === 'string' &&
     typeof r.servings === 'number' &&
-    typeof r.difficulty === 'number'
+    typeof r.difficulty === 'number' &&
+    typeof r.difficultyLabel === 'string'
   );
 }

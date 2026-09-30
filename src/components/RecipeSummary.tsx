@@ -6,6 +6,7 @@ export function RecipeSummary({ recipe }: { recipe: DrinkRecipe | null }) {
   const prep = recipe.prepTime;
   const servings = servingLabel(recipe.servings);
   const difficulty = recipe.difficulty;
+  const label = recipe.difficultyLabel || labelFor(difficulty);
 
   return (
     <section className="menu-section recipe-summary" aria-label="Recipe summary">
@@ -19,13 +20,14 @@ export function RecipeSummary({ recipe }: { recipe: DrinkRecipe | null }) {
       </p>
       <p className="summary-row">
         <span className="summary-label">Difficulty</span>
-        <span className="summary-stars" aria-label={`Difficulty ${difficulty} out of 5`}>
+        <span className="summary-stars" aria-label={`Difficulty ${difficulty} out of 5, ${label}`}>
           {[1, 2, 3, 4, 5].map((star) => (
             <span key={star} className={star <= difficulty ? 'is-on' : 'is-off'} aria-hidden>
-              ★
+              {star <= difficulty ? '★' : '☆'}
             </span>
           ))}
         </span>
+        <span className="summary-note">{label}</span>
       </p>
     </section>
   );
@@ -33,4 +35,8 @@ export function RecipeSummary({ recipe }: { recipe: DrinkRecipe | null }) {
 
 function servingLabel(count: number): string {
   return count === 1 ? '1 serving' : `${count} servings`;
+}
+
+function labelFor(score: number): string {
+  return ['Very easy', 'Easy', 'Moderate', 'Advanced', 'Very advanced'][score - 1] ?? 'Moderate';
 }

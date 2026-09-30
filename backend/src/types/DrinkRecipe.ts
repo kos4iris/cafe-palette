@@ -62,5 +62,7 @@ export interface DrinkRecipe {
   servings: number;
   /** 1 is easiest, 5 is the most involved. */
   difficulty: number;
+  /** Matches difficulty: Very easy, Easy, Moderate, Advanced, or Very advanced. */
+  difficultyLabel: string;
   sources: RecipeSource[];
 }

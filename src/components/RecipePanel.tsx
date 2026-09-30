@@ -30,9 +30,9 @@ export function RecipePanel({
 
       {children}
 
-      <CompatibilityNote result={compatibility} />
-
       <RecipeSummary recipe={aiRecipe} />
+
+      <CompatibilityNote result={compatibility} />
 
       <section className="menu-section recipe-card" aria-live="polite">
         <h3 className="menu-section-label recipe-label">Recipe</h3>

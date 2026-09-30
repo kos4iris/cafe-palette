@@ -167,7 +167,6 @@
   height: auto;
   padding: 0;
   border: none;
-  border-top: 1px solid var(--line);
   background: transparent;
   padding: 1.2rem 0 0;
   display: grid;
@@ -213,6 +212,13 @@
 
 .summary-stars .is-off {
   color: rgba(69, 116, 171, 0.35);
+}
+
+.summary-note {
+  font-size: 0.82rem;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  color: #314368;
 }
 
 .type-link {
@@ -576,8 +582,7 @@
 
 .compat {
   margin-top: 0.95rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--line);
+  padding-top: 0.35rem;
   font-weight: 300;
   font-size: 0.88rem;
   line-height: 1.45;
