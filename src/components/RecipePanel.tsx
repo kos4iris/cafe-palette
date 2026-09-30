@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import type { DrinkRecipe } from '../services/drinkApi';
 import type { GeneratedRecipe, Ingredient } from '../types';
+import { findSavedRecipeId, saveRecipe } from '../utils/savedRecipes';
 
 interface Props {
   selected: Ingredient[];
@@ -101,6 +102,24 @@ export function RecipePanel({
 }
 
 function AiRecipeView({ recipe }: { recipe: DrinkRecipe }) {
+  const [savedId, setSavedId] = useState<string | null>(() => findSavedRecipeId(recipe));
+  const [notice, setNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSavedId(findSavedRecipeId(recipe));
+    setNotice(null);
+  }, [recipe]);
+
+  function handleSave() {
+    try {
+      const saved = saveRecipe(recipe);
+      setSavedId(saved.id);
+      setNotice('Saved to your palette');
+    } catch {
+      setNotice("Couldn't save this recipe.");
+    }
+  }
+
   return (
     <>
       <h3 className="drink-name">{recipe.name}</h3>
@@ -153,6 +172,22 @@ function AiRecipeView({ recipe }: { recipe: DrinkRecipe }) {
           </ul>
         </>
       )}
+
+      <div className="save-recipe-row">
+        <button
+          type="button"
+          className="save-recipe"
+          onClick={handleSave}
+          disabled={savedId !== null}
+        >
+          {savedId ? 'Saved' : 'Save Recipe'}
+        </button>
+        {notice && (
+          <p className="save-note" role="status">
+            {notice}
+          </p>
+        )}
+      </div>
     </>
   );
 }

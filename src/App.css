@@ -48,20 +48,20 @@
 
 .brand-line:not(.brand-palette) {
   left: 161px;
-  top: 30px;
+  top: 46px;
 }
 
 .brand-palette {
   position: absolute;
   left: 330px;
-  top: 107px;
+  top: 123px;
   margin: 0;
 }
 
 .brand-atelier {
   position: absolute;
   left: 470px;
-  top: 173px;
+  top: 189px;
   margin: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 400;
@@ -292,7 +292,7 @@
   --ink-soft: #4574ab;
   --paper: #f8f1e7;
   --line: rgba(69, 116, 171, 0.4);
-  padding: 2rem 0.15rem 1rem;
+  padding: calc(2rem + 12px) 0.15rem 1rem;
   border-left: 1px solid var(--line);
   padding-left: clamp(1.25rem, 3vw, 2rem);
   min-height: 24rem;
@@ -650,7 +650,7 @@
     border-left: none;
     border-top: 1px solid var(--line);
     padding-left: 0;
-    padding-top: 1.5rem;
+    padding-top: calc(1.5rem + 12px);
   }
 
   .mixing-canvas {
@@ -683,4 +683,299 @@
     max-width: 4.8rem;
     max-height: 4.8rem;
   }
+}
+
+.site-nav-strip {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.85rem clamp(1.5rem, 4vw, 2.75rem) 0.7rem;
+  background: rgba(178, 200, 209, 0.4);
+}
+
+.site-nav {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 1.35rem;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.site-nav a {
+  color: #4574ab;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 0.08rem;
+}
+
+.site-nav a:hover,
+.site-nav a.is-active {
+  color: #051060;
+  border-bottom-color: #051060;
+}
+
+.save-recipe-row {
+  margin-top: 1.4rem;
+}
+
+.save-recipe {
+  padding: 0.7rem 0.95rem;
+  border: 1px solid #4574ab;
+  background: transparent;
+  color: #4574ab;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.save-recipe:hover:not(:disabled) {
+  background: #4574ab;
+  color: #f8f1e7;
+}
+
+.save-recipe:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.save-note {
+  margin-top: 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: #4574ab;
+}
+
+.saved-page,
+.saved-modal {
+  --ink: #051060;
+  --ink-soft: #4574ab;
+  --line: rgba(69, 116, 171, 0.4);
+  background: #f8f1e7;
+  color: #314368;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.saved-page {
+  min-height: calc(100vh - 3rem);
+  padding: 2.5rem clamp(1.25rem, 4vw, 3.5rem) 4.5rem;
+}
+
+.saved-header h1 {
+  font-family: 'Aston Script', cursive;
+  font-weight: 700;
+  font-size: clamp(2.6rem, 6vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #051060;
+}
+
+.saved-lead {
+  margin-top: calc(0.7rem + 10px);
+  max-width: 28rem;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.45;
+  color: #314368;
+}
+
+.saved-empty {
+  margin-top: 2.75rem;
+  max-width: 26rem;
+}
+
+.saved-empty p {
+  font-weight: 300;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: #314368;
+}
+
+.saved-empty p + p {
+  margin-top: 0.35rem;
+  color: #4574ab;
+}
+
+.saved-back {
+  display: inline-block;
+  margin-top: 1.35rem;
+  padding: 0.75rem 1.1rem;
+  border: 1px solid #4574ab;
+  background: #4574ab;
+  color: #f8f1e7;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.saved-back:hover {
+  background: transparent;
+  color: #4574ab;
+}
+
+.saved-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
+  gap: 1.15rem;
+  margin-top: 2.5rem;
+  list-style: none;
+}
+
+.saved-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  height: 100%;
+  padding: 1.25rem 1.15rem 1.1rem;
+  border: 1px solid rgba(69, 116, 171, 0.4);
+  background: rgba(255, 252, 247, 0.45);
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+
+.saved-card:hover {
+  border-color: #4574ab;
+}
+
+.saved-card-name {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: #051060;
+}
+
+.saved-card-desc {
+  font-size: 0.92rem;
+  font-weight: 300;
+  line-height: 1.45;
+  color: #314368;
+}
+
+.saved-card .saved-card-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.saved-card-ings,
+.saved-card-date {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: #4574ab;
+}
+
+.saved-card-ings {
+  letter-spacing: 0.04em;
+}
+
+.saved-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+.saved-view,
+.saved-remove {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.saved-view {
+  border: 1px solid #4574ab;
+  background: transparent;
+  color: #4574ab;
+  padding: 0.55rem 0.7rem;
+}
+
+.saved-view:hover {
+  background: #4574ab;
+  color: #f8f1e7;
+}
+
+.saved-remove {
+  border: none;
+  background: transparent;
+  color: #4574ab;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid transparent;
+}
+
+.saved-remove:hover {
+  color: #051060;
+  border-bottom-color: #051060;
+}
+
+.saved-modal {
+  width: min(34rem, calc(100vw - 2rem));
+  max-height: min(85vh, 40rem);
+  margin: auto;
+  padding: 0;
+  border: 1px solid rgba(69, 116, 171, 0.45);
+}
+
+.saved-modal::backdrop {
+  background: rgba(5, 16, 96, 0.28);
+}
+
+.saved-modal-body {
+  position: relative;
+  max-height: min(85vh, 40rem);
+  padding: 1.6rem 1.45rem 1.5rem;
+  overflow: auto;
+}
+
+.saved-modal h2 {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: #051060;
+  padding-right: 1.75rem;
+}
+
+.saved-modal h3 {
+  margin: 1.25rem 0 0.55rem;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #4574ab;
+}
+
+.saved-modal .saved-card-desc {
+  margin-top: 0.45rem;
+}
+
+.saved-modal-close {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.9rem;
+  border: none;
+  background: transparent;
+  color: #4574ab;
+  font-size: 1.35rem;
+  line-height: 1;
+  padding: 0.15rem 0.3rem;
+}
+
+.saved-modal-close:hover {
+  color: #051060;
 }
