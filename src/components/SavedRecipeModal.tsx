@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import type { SavedRecipe } from '../utils/savedRecipes';
-import { FlavorDetailsModal } from './FlavorDetailsModal';
-import { isFlavorProfile } from '../utils/flavorProfile';
 
 interface Props {
   recipe: SavedRecipe;
@@ -10,8 +8,6 @@ interface Props {
 
 export function SavedRecipeModal({ recipe, onClose }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [detailsOpen, setDetailsOpen] = useState(false);
-  const profile = isFlavorProfile(recipe.flavorProfile) ? recipe.flavorProfile : null;
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -33,15 +29,10 @@ export function SavedRecipeModal({ recipe, onClose }: Props) {
     return () => dialog.removeEventListener('cancel', onCancel);
   }, [onClose]);
 
-  useEffect(() => {
-    setDetailsOpen(false);
-  }, [recipe.id]);
-
   const equipment = recipe.equipment ?? [];
   const sources = recipe.sources ?? [];
 
   return (
-    <>
     <dialog
       ref={dialogRef}
       className="saved-modal"
@@ -112,23 +103,7 @@ export function SavedRecipeModal({ recipe, onClose }: Props) {
             </ul>
           </>
         )}
-
-        {profile && (
-          <div className="save-recipe-row">
-            <button type="button" className="details-toggle" onClick={() => setDetailsOpen(true)}>
-              Details
-            </button>
-          </div>
-        )}
       </div>
     </dialog>
-      {profile && detailsOpen && (
-        <FlavorDetailsModal
-          profile={profile}
-          onBack={() => setDetailsOpen(false)}
-          onClose={onClose}
-        />
-      )}
-    </>
   );
 }

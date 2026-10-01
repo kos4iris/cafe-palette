@@ -12,6 +12,12 @@ export function SiteNav() {
       >
         Saved
       </NavLink>
+      <NavLink
+        to="/flavor-profile"
+        className={({ isActive }) => (isActive ? 'is-active' : undefined)}
+      >
+        Flavor Profile
+      </NavLink>
     </nav>
   );
 }

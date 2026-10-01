@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import bloom from '../assets/saved-bloom.jpg';
+import bloom from '../assets/flavor-bloom.jpg';
 import { SavedRecipeCard } from '../components/SavedRecipeCard';
 import { SavedRecipeModal } from '../components/SavedRecipeModal';
 import { getSavedRecipes, removeSavedRecipe, type SavedRecipe } from '../utils/savedRecipes';
