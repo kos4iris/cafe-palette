@@ -123,16 +123,42 @@ NAME
 const COMPATIBILITY_INSTRUCTION = `You judge whether a set of cafe-drink ingredients can work together.
 Return one short judgment. Do not write a recipe.
 
-Use status:
-- "good" when the flavors generally pair well. title must be "Great pairing"
-- "unusual" when the mix is adventurous but can still work with the right technique. title must be "Interesting combination"
-- "problematic" when there is a real texture, separation, or muddy-flavor issue. title must be "Heads up"
+Before judging, consider whether these ingredients are commonly paired in real drinks, desserts, or cafe recipes. Different flavor profiles are not a problem by themselves. Sweet fruit with earthy tea, citrus with coffee, and herbs with berries are often standard pairings.
 
-Distinguish a flavor mismatch from a texture or separation issue, and say which one it is.
-Explain separation or curdling briefly when it applies.
-Do not call a combination unsafe unless there is a genuine safety concern. These are ordinary drink ingredients.
-reason is one sentence.
-suggestion is one concise alternative, or null when none is needed.`;
+Distinguish three cases:
+1. Common pairing: used in real drinks, desserts, or cafe recipes. status "good", title "Great pairing".
+2. Workable but unconventional pairing: genuinely uncommon, or it needs a specific preparation method to work. status "unusual", title "Interesting combination".
+3. Actual technical problem: curdling or separation, strong bitterness or acidity that cannot reasonably be balanced, unsafe preparation, or a known texture incompatibility. status "problematic", title "Heads up".
+
+Do not use "unusual" or "problematic" just because the flavors taste different.
+If search or common knowledge shows the pairing in real recipes, prefer status "good".
+Only use "unusual" when the combination is genuinely uncommon or needs a specific preparation method.
+Only use "problematic" for a clear technical issue. Do not call a combination unsafe unless there is a genuine safety concern. These are ordinary drink ingredients.
+
+Examples that should generally be "good":
+- mango + matcha
+- strawberry + matcha
+- peach + green tea
+- coffee + orange
+- lemon + matcha
+- coconut + coffee
+- mango + coconut
+- strawberry + basil
+
+For mango + matcha, a fitting result is status "good", title "Great pairing", reason "Mango's sweetness balances matcha's earthy bitterness, which is why the combination is common in lattes, smoothies, and cafe drinks.", suggestion "Oat milk or coconut milk can make the pairing even smoother."
+
+reason is one sentence and should say why a common pairing works.
+suggestion is one concise optional improvement, or null when none is needed. On a good pairing, a suggestion is an enhancement, not a warning.`;
+
+const COMPATIBILITY_RESEARCH_INSTRUCTION = `You check whether these ingredients are commonly paired before a compatibility judgment.
+Use Google Search. Look for real drinks, desserts, and cafe recipes that combine them.
+
+Report concisely in plain prose (no JSON, max 140 words):
+- whether this pairing appears in real recipes, and what those drinks or desserts are
+- any known preparation method that makes it work
+- any real texture issue, such as curdling or separation
+
+Do not assign good, unusual, or problematic. Do not write a recipe.`;
 
 const COMPATIBILITY_SCHEMA = {
   type: 'object',
@@ -396,18 +422,53 @@ export async function evaluateCompatibility(ingredients: string[]): Promise<{
   reason: string;
   suggestion: string | null;
 }> {
+  const research = await researchCompatibility(ingredients);
+  const contents = [
+    `Ingredients: ${ingredients.join(', ')}`,
+    research
+      ? `\nSearch notes from real drinks, desserts, and cafe recipes. Use them to decide whether this pairing is common. Do not copy them verbatim:\n${research}`
+      : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
+
   const response = await getClient().models.generateContent({
     model: modelName(),
-    contents: `Ingredients: ${ingredients.join(', ')}`,
+    contents,
     config: {
       systemInstruction: COMPATIBILITY_INSTRUCTION,
       responseMimeType: 'application/json',
       responseJsonSchema: COMPATIBILITY_SCHEMA,
-      httpOptions: { timeout: 20_000 },
+      httpOptions: { timeout: 15_000 },
     },
   });
 
   return parseCompatibilityResponse(response.text);
+}
+
+/** Grounded lookup for whether an unclear mix shows up in real recipes. */
+async function researchCompatibility(ingredients: string[]): Promise<string | null> {
+  if (process.env.GEMINI_GROUNDING?.trim().toLowerCase() === 'off') return null;
+
+  try {
+    const response = await getClient().models.generateContent({
+      model: modelName(),
+      contents: `Are these ingredients commonly paired in drinks, desserts, or cafe recipes? ${ingredients.join(', ')}`,
+      config: {
+        systemInstruction: COMPATIBILITY_RESEARCH_INSTRUCTION,
+        tools: [{ googleSearch: {} }],
+        httpOptions: { timeout: 12_000 },
+      },
+    });
+    const notes = response.text?.trim();
+    return notes || null;
+  } catch (err) {
+    console.warn(
+      '[check-compatibility] grounding unavailable, continuing without it:',
+      err instanceof Error ? err.message.slice(0, 140) : 'unknown error',
+    );
+    return null;
+  }
 }
 
 export async function generateDrinkRecipe(

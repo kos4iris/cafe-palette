@@ -3,7 +3,7 @@ import {
   type CompatibilityResult,
 } from '../utils/checkIngredientCompatibility';
 
-const TIMEOUT_MS = 20_000;
+const TIMEOUT_MS = 32_000;
 
 export async function checkCompatibility(
   ingredients: string[],
