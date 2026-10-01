@@ -1480,9 +1480,9 @@
   fill: transparent;
 }
 
-.flavor-point:focus-visible .flavor-dot-ring {
-  stroke: #051060;
-  stroke-width: 1.1;
+.flavor-point:focus-visible .flavor-star {
+  stroke: #f8f1e7;
+  stroke-width: 0.9;
 }
 
 .flavor-tooltip {

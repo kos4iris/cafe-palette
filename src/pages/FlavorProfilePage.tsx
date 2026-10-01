@@ -56,6 +56,10 @@ export default function FlavorProfilePage() {
               <Extreme label="Most tart" recipe={extreme(plotted, 'tart')} />
               <Extreme label="Richest" recipe={extreme(plotted, 'rich')} />
               <Extreme label="Lightest" recipe={extreme(plotted, 'light')} />
+              <div>
+                <dt>Most popular ingredient</dt>
+                <dd>{mostPopularIngredient(plotted)}</dd>
+              </div>
             </dl>
           </div>
         </>
@@ -77,6 +81,42 @@ function Extreme({ label, recipe }: { label: string; recipe: PlottedRecipe }) {
 
 function hasFlavor(recipe: SavedRecipe): recipe is PlottedRecipe {
   return isFlavorProfile(recipe.flavorProfile);
+}
+
+function mostPopularIngredient(recipes: PlottedRecipe[]): string {
+  const counts = new Map<string, { name: string; count: number; savedAt: string }>();
+
+  for (const recipe of recipes) {
+    const seen = new Set<string>();
+    for (const item of recipe.ingredients) {
+      if (item.userSelected !== true) continue;
+      const key = item.name.trim().toLowerCase();
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      const current = counts.get(key);
+      if (!current) {
+        counts.set(key, { name: item.name.trim(), count: 1, savedAt: recipe.savedAt });
+        continue;
+      }
+      current.count += 1;
+      if (recipe.savedAt >= current.savedAt) {
+        current.savedAt = recipe.savedAt;
+        current.name = item.name.trim();
+      }
+    }
+  }
+
+  let best: { name: string; count: number; savedAt: string } | null = null;
+  for (const item of counts.values()) {
+    if (
+      !best ||
+      item.count > best.count ||
+      (item.count === best.count && item.savedAt > best.savedAt)
+    ) {
+      best = item;
+    }
+  }
+  return best?.name ?? '—';
 }
 
 function extreme(recipes: PlottedRecipe[], key: keyof FlavorProfile): PlottedRecipe {

@@ -142,6 +142,7 @@ export function FlavorMap({
             active={drink.id === hoveredId}
             clustered={plotted.filter((item) => item.clusterId === drink.clusterId).length > 1}
             label={pointLabel(drink)}
+            seed={drink.id}
             onSelect={() => onSelect(drink.id)}
             onHover={(hovering) => setHoveredId(hovering ? drink.id : null)}
           />
