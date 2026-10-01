@@ -13,6 +13,13 @@ export interface DrinkRecipeStep {
   instruction: string;
 }
 
+export interface FlavorProfile {
+  sweet: number;
+  tart: number;
+  light: number;
+  rich: number;
+}
+
 export interface DrinkRecipeSource {
   title: string;
   url: string;
@@ -57,6 +64,7 @@ export interface DrinkRecipe {
     considered: boolean;
     reason: string;
   };
+  flavorProfile?: FlavorProfile | null;
 }
 
 export interface GenerateDrinkInput {

@@ -11,6 +11,24 @@
   min-height: 1040px;
 }
 
+.stage-bloom {
+  position: absolute;
+  top: -1.625rem;
+  left: 0;
+  width: min(63%, 690px);
+  height: auto;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(to right, #000 62%, transparent),
+    linear-gradient(to bottom, #000 58%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, #000 62%, transparent),
+    linear-gradient(to bottom, #000 58%, transparent);
+  mask-composite: intersect;
+}
+
 .poster {
   position: static;
   width: 100%;
@@ -850,6 +868,14 @@
 }
 
 @media (max-width: 900px) {
+  .stage-bloom {
+    width: min(72%, 360px);
+  }
+
+  .saved-bloom {
+    width: min(48%, 240px);
+  }
+
   .workspace {
     grid-template-columns: 1fr;
   }
@@ -894,10 +920,12 @@
 }
 
 .site-nav-strip {
+  position: relative;
+  z-index: 5;
   display: flex;
   justify-content: flex-end;
   padding: 0.85rem clamp(1.5rem, 4vw, 2.75rem) 0.7rem;
-  background: rgba(178, 200, 209, 0.4);
+  background: rgba(150, 177, 194, 0.6);
 }
 
 .site-nav {
@@ -913,7 +941,7 @@
 }
 
 .site-nav a {
-  color: #4574ab;
+  color: #051060;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   padding-bottom: 0.08rem;
@@ -941,10 +969,15 @@
 }
 
 .save-recipe-row {
-  margin-top: 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.15rem;
 }
 
-.save-recipe {
+.save-recipe,
+.details-toggle {
   padding: 0.7rem 0.95rem;
   border: 1px solid #4574ab;
   background: transparent;
@@ -956,7 +989,9 @@
   text-transform: uppercase;
 }
 
-.save-recipe:hover:not(:disabled) {
+.save-recipe:hover:not(:disabled),
+.details-toggle:hover,
+.details-toggle.is-open {
   background: #4574ab;
   color: #f8f1e7;
 }
@@ -967,7 +1002,8 @@
 }
 
 .save-note {
-  margin-top: 0.55rem;
+  flex-basis: 100%;
+  margin: 0;
   font-size: 0.85rem;
   font-weight: 300;
   color: #4574ab;
@@ -984,8 +1020,34 @@
 }
 
 .saved-page {
+  position: relative;
   min-height: calc(100vh - 3rem);
   padding: 2.5rem clamp(1.25rem, 4vw, 3.5rem) 4.5rem;
+}
+
+.saved-bloom {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(42%, 460px);
+  height: auto;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(to left, #000 62%, transparent),
+    linear-gradient(to bottom, #000 78%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to left, #000 62%, transparent),
+    linear-gradient(to bottom, #000 78%, transparent);
+  mask-composite: intersect;
+}
+
+.saved-header,
+.saved-empty,
+.saved-grid {
+  position: relative;
+  z-index: 1;
 }
 
 .saved-header {
@@ -1064,7 +1126,7 @@
   height: 100%;
   padding: 1.25rem 1.15rem 1.1rem;
   border: 1px solid rgba(69, 116, 171, 0.4);
-  background: rgba(255, 252, 247, 0.45);
+  background: rgba(255, 252, 247, 0.64);
   text-align: left;
   cursor: pointer;
   color: inherit;
@@ -1170,6 +1232,12 @@
   overflow: auto;
 }
 
+.details-strip {
+  height: 1.15rem;
+  margin: -1.6rem -1.45rem 0.45rem;
+  background: rgba(150, 177, 194, 0.6);
+}
+
 .saved-modal h2 {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 1.2rem;
@@ -1203,16 +1271,85 @@
   color: #314368;
 }
 
+.recipe-details {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+
+.recipe-details.is-open {
+  grid-template-rows: 1fr;
+}
+
+.recipe-details-inner {
+  overflow: hidden;
+}
+
+.flavor-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.flavor-field {
+  fill: #f4e5d3;
+}
+
+.flavor-wash {
+  opacity: 0.26;
+}
+
+.flavor-grid {
+  stroke: rgba(173, 199, 217, 0.5);
+  stroke-width: 0.5;
+}
+
+.flavor-grid-major {
+  stroke: rgba(69, 116, 171, 0.2);
+  stroke-width: 0.7;
+}
+
+.flavor-axis {
+  stroke: rgba(69, 116, 171, 0.52);
+  stroke-width: 0.8;
+}
+
+.flavor-arrow {
+  fill: rgba(69, 116, 171, 0.52);
+}
+
+.flavor-dot-wash {
+  fill: rgba(120, 158, 190, 0.45);
+}
+
+.flavor-dot-ring {
+  fill: rgba(248, 241, 231, 0.92);
+  stroke: rgba(69, 116, 171, 0.28);
+  stroke-width: 0.6;
+}
+
+.flavor-dot {
+  fill: #314368;
+}
+
+.flavor-label {
+  fill: #051060;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+}
+
 .saved-modal-close {
   position: absolute;
-  top: 0.85rem;
+  top: 0;
   right: 0.9rem;
   border: none;
   background: transparent;
-  color: #4574ab;
-  font-size: 1.35rem;
-  line-height: 1;
-  padding: 0.15rem 0.3rem;
+  color: #051060;
+  font-size: 1.15rem;
+  line-height: 1.15rem;
+  padding: 0 0.3rem;
 }
 
 .saved-modal-close:hover {

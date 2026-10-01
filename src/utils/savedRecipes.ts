@@ -3,7 +3,9 @@ import type {
   DrinkRecipeIngredient,
   DrinkRecipeSource,
   DrinkRecipeStep,
+  FlavorProfile,
 } from '../services/drinkApi';
+import { isFlavorProfile } from './flavorProfile';
 
 const STORAGE_KEY = 'cafe-palette-saved-recipes';
 
@@ -20,6 +22,7 @@ export interface SavedRecipe {
     name: string;
     description: string;
   } | null;
+  flavorProfile?: FlavorProfile | null;
   savedAt: string;
 }
 
@@ -113,6 +116,9 @@ export function saveRecipe(recipe: DrinkRecipe): SavedRecipe {
             description: recipe.topper.description,
           },
         }
+      : {}),
+    ...(isFlavorProfile(recipe.flavorProfile)
+      ? { flavorProfile: { ...recipe.flavorProfile } }
       : {}),
     savedAt: new Date().toISOString(),
   };

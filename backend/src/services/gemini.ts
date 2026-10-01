@@ -103,6 +103,14 @@ TOPPER
 - If no topper fits, set topper to null.
 - Always set topperDecision.considered to true, and set topperDecision.reason to one sentence explaining why you included that topper or why you left it off.
 
+FLAVOR
+- After the recipe is finished, score the drink you actually wrote, including amounts, preparation, and any topper. Do not score only the ingredients the user selected.
+- sweet: 0 is not sweet, 10 is extremely sweet. Count fruit, syrup, sugar, honey, and sweet toppings, and how much of each is in the finished drink.
+- tart: 0 is essentially no acidity, 10 is extremely tart. Count citrus, tart fruit, and acidic mixers. Sweet and tart are independent. A drink may be both.
+- light: 0 is dense and heavy, 10 is extremely light and refreshing. Count water, tea, carbonation, and ice against cream and puree.
+- rich: 0 is lean or watery, 10 is extremely creamy, dense, or rich. Count dairy, cream, coconut, yogurt, and a rich topper. Light and rich are independent. A drink may be somewhat both.
+- Do not make opposing scores exact inverses. Return whole numbers from 0 to 10. A very sweet, creamy milk tea might be sweet 8, tart 1, light 3, rich 8.
+
 OTHER
 - prepTime is the active time for one person, written like "5 min" or "12 min". Count waiting that is part of the method, such as steeping or blending.
 - servings must be the whole number in the request, from 1 to 12. Write the recipe for exactly that many servings.
@@ -299,6 +307,18 @@ const RECIPE_SCHEMA = {
       },
       required: ['considered', 'reason'],
     },
+    flavorProfile: {
+      type: 'object',
+      description:
+        'Scores for the finished drink, from 0 to 10. Opposing scores are independent.',
+      properties: {
+        sweet: { type: 'integer', minimum: 0, maximum: 10 },
+        tart: { type: 'integer', minimum: 0, maximum: 10 },
+        light: { type: 'integer', minimum: 0, maximum: 10 },
+        rich: { type: 'integer', minimum: 0, maximum: 10 },
+      },
+      required: ['sweet', 'tart', 'light', 'rich'],
+    },
     dietaryConflict: {
       type: 'object',
       description:
@@ -325,6 +345,7 @@ const RECIPE_SCHEMA = {
     'difficultyLabel',
     'topper',
     'topperDecision',
+    'flavorProfile',
     'dietaryConflict',
   ],
 } as const;
@@ -667,6 +688,7 @@ export function parseRecipe(text: string | undefined): DrinkRecipe {
   const dietaryConflict = cleanDietaryConflict(obj.dietaryConflict);
   const topper = cleanTopper(obj.topper);
   const topperDecision = cleanTopperDecision(obj.topperDecision);
+  const flavorProfile = cleanFlavorProfile(obj.flavorProfile);
   console.log(
     '[generate-drink] topper decision',
     JSON.stringify({ topper, topperDecision }),
@@ -689,6 +711,7 @@ export function parseRecipe(text: string | undefined): DrinkRecipe {
     dietaryConflict,
     topper,
     topperDecision,
+    flavorProfile,
   };
 }
 
@@ -853,6 +876,23 @@ function cleanTopper(value: unknown): DrinkRecipe['topper'] {
   const description = cleanString(row.description);
   if (!name || !description) return null;
   return { name, description };
+}
+
+function cleanFlavorProfile(value: unknown): DrinkRecipe['flavorProfile'] {
+  if (typeof value !== 'object' || value === null) return null;
+  const row = value as Record<string, unknown>;
+  const sweet = cleanScore(row.sweet);
+  const tart = cleanScore(row.tart);
+  const light = cleanScore(row.light);
+  const rich = cleanScore(row.rich);
+  if (sweet === null || tart === null || light === null || rich === null) return null;
+  return { sweet, tart, light, rich };
+}
+
+function cleanScore(value: unknown): number | null {
+  const n = typeof value === 'number' ? value : Number(value);
+  if (!Number.isFinite(n)) return null;
+  return Math.max(0, Math.min(10, Math.round(n > 10 ? n / 10 : n)));
 }
 
 function cleanTopperDecision(value: unknown): DrinkRecipe['topperDecision'] {

@@ -112,4 +112,11 @@ export interface DrinkRecipe {
     considered: boolean;
     reason: string;
   };
+  /** Finished-drink scores from 0 to 10. Opposing axes are independent. */
+  flavorProfile: {
+    sweet: number;
+    tart: number;
+    light: number;
+    rich: number;
+  } | null;
 }

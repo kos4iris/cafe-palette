@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import bloom from '../assets/stage-bloom.jpg';
 import { GenerateControls } from '../components/GenerateControls';
 import { MixingCanvas } from '../components/MixingCanvas';
 import { RecipePanel } from '../components/RecipePanel';
@@ -99,6 +100,7 @@ export default function HomePage() {
     <div className="app">
       <main className="workspace">
         <section className="stage">
+          <img className="stage-bloom" src={bloom} alt="" />
           <p className="instructions">
             drag and drop any selection of ingredients for a yummy drink
             recipe

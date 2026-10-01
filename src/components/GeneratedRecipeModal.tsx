@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import type { DrinkRecipe } from '../services/drinkApi';
 import { findSavedRecipeId, saveRecipe } from '../utils/savedRecipes';
+import { FlavorDetailsModal } from './FlavorDetailsModal';
 import { RecipeSummary } from './RecipeSummary';
+import { isFlavorProfile } from '../utils/flavorProfile';
 
 interface Props {
   recipe: DrinkRecipe;
@@ -12,6 +14,8 @@ export function GeneratedRecipeModal({ recipe, onClose }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [savedId, setSavedId] = useState<string | null>(() => findSavedRecipeId(recipe));
   const [notice, setNotice] = useState<string | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const profile = isFlavorProfile(recipe.flavorProfile) ? recipe.flavorProfile : null;
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -36,6 +40,7 @@ export function GeneratedRecipeModal({ recipe, onClose }: Props) {
   useEffect(() => {
     setSavedId(findSavedRecipeId(recipe));
     setNotice(null);
+    setDetailsOpen(false);
   }, [recipe]);
 
   function handleSave() {
@@ -49,6 +54,7 @@ export function GeneratedRecipeModal({ recipe, onClose }: Props) {
   }
 
   return (
+    <>
     <dialog
       ref={dialogRef}
       className="saved-modal"
@@ -58,6 +64,7 @@ export function GeneratedRecipeModal({ recipe, onClose }: Props) {
       }}
     >
       <div className="saved-modal-body">
+        <div className="details-strip" aria-hidden="true" />
         <button type="button" className="saved-modal-close" onClick={onClose} aria-label="Close">
           ×
         </button>
@@ -130,6 +137,11 @@ export function GeneratedRecipeModal({ recipe, onClose }: Props) {
           >
             {savedId ? 'Saved' : 'Save Recipe'}
           </button>
+          {profile && (
+            <button type="button" className="details-toggle" onClick={() => setDetailsOpen(true)}>
+              Details
+            </button>
+          )}
           {notice && (
             <p className="save-note" role="status">
               {notice}
@@ -138,5 +150,13 @@ export function GeneratedRecipeModal({ recipe, onClose }: Props) {
         </div>
       </div>
     </dialog>
+      {profile && detailsOpen && (
+        <FlavorDetailsModal
+          profile={profile}
+          onBack={() => setDetailsOpen(false)}
+          onClose={onClose}
+        />
+      )}
+    </>
   );
 }

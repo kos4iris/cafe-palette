@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import bloom from '../assets/saved-bloom.jpg';
 import { SavedRecipeCard } from '../components/SavedRecipeCard';
 import { SavedRecipeModal } from '../components/SavedRecipeModal';
 import { getSavedRecipes, removeSavedRecipe, type SavedRecipe } from '../utils/savedRecipes';
@@ -16,6 +17,7 @@ export default function SavedRecipesPage() {
 
   return (
     <div className="saved-page">
+      <img className="saved-bloom" src={bloom} alt="" />
       <header className="saved-header">
         <h1>Saved Recipes</h1>
         <p className="saved-lead">your favorite drink recipes.</p>
