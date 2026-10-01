@@ -279,7 +279,7 @@ export function inferDrinkType(ingredients: Ingredient[]): DrinkType {
 
   if (has('coffee') || (hasMilk && has('matcha'))) return 'latte';
   if (hasTea) return 'tea';
-  if (has('sparkling-water', 'sprite', 'coca-cola', 'energy-drink')) return 'sparkling';
+  if (has('sparkling-water', 'coca-cola', 'energy-drink')) return 'sparkling';
   if (hasMilk && ingredients.some((item) => item.category === 'fruit')) return 'smoothie';
   return 'refresher';
 }

@@ -890,6 +890,25 @@
     gap: 1rem 1.5rem;
   }
 
+  .flavor-map-block,
+  .flavor-map-block.is-unplotted {
+    height: auto;
+    min-height: 0;
+  }
+
+  .network-frame {
+    height: min(78vh, 32rem);
+    min-height: 22rem;
+  }
+
+  .network-panel {
+    top: auto;
+    bottom: 2.6rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+  }
+
   .stage-bloom {
     width: min(72%, 360px);
   }
@@ -1357,7 +1376,7 @@
 .flavor-label {
   fill: #051060;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 300;
   letter-spacing: 0.16em;
 }
@@ -1372,10 +1391,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  height: calc(100dvh - 2.8rem);
-  min-height: 0;
-  padding: 2.5rem clamp(1.25rem, 4vw, 3.5rem) 1.15rem;
-  overflow: hidden;
+  height: auto;
+  min-height: calc(100dvh - 2.8rem);
+  padding: 2.5rem clamp(1.25rem, 4vw, 3.5rem) 2.75rem;
+  overflow: visible;
 }
 
 .flavor-bloom {
@@ -1398,14 +1417,54 @@
 
 .flavor-header,
 .flavor-note,
-.flavor-stage {
+.flavor-stage,
+.flavor-map-block,
+.network-section {
   position: relative;
   z-index: 1;
 }
 
 .flavor-header,
-.flavor-note {
+.flavor-note,
+.flavor-section-title {
   flex: 0 0 auto;
+}
+
+.flavor-section-title {
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #4574ab;
+}
+
+.flavor-map-block {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 9.6rem);
+  min-height: 32rem;
+  margin-top: 1.15rem;
+}
+
+.flavor-map-block.is-unplotted {
+  height: auto;
+  min-height: 0;
+}
+
+.network-section {
+  margin-top: 1.35rem;
+}
+
+.network-lead {
+  margin: 0.4rem 0 0;
+  max-width: 36rem;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.45;
+  color: #314368;
 }
 
 .flavor-header {
@@ -1560,6 +1619,209 @@
   font-size: 1rem;
   font-weight: 400;
   color: #051060;
+}
+
+.network-frame {
+  position: relative;
+  height: min(70vh, 40rem);
+  min-height: 28rem;
+  margin-top: 1rem;
+  background: #f6ebde;
+  border: 1px solid rgba(69, 116, 171, 0.28);
+  overflow: hidden;
+}
+
+.network-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+}
+
+.network-svg:active {
+  cursor: grabbing;
+}
+
+.network-canvas {
+  fill: transparent;
+}
+
+.network-edge {
+  stroke: rgba(69, 116, 171, 0.38);
+  stroke-width: 1.15;
+  pointer-events: none;
+  transition: stroke 160ms ease, stroke-width 160ms ease, opacity 160ms ease;
+}
+
+.network-edge.is-hot {
+  stroke: rgba(5, 16, 96, 0.62);
+  stroke-width: 1.6;
+}
+
+.network-edge.is-dim,
+.network-node.is-dim {
+  opacity: 0.16;
+}
+
+.network-node {
+  cursor: pointer;
+  outline: none;
+}
+
+.network-hit {
+  fill: transparent;
+}
+
+.network-drink {
+  fill: #506186;
+}
+
+.network-ingredient {
+  fill: #f8f1e7;
+  stroke: #4574ab;
+  stroke-width: 1.25;
+}
+
+.network-node.is-hot .network-drink {
+  fill: #051060;
+}
+
+.network-node.is-hot .network-ingredient {
+  fill: #adc7d9;
+  stroke: #051060;
+  stroke-width: 1.6;
+}
+
+.network-node:focus-visible .network-drink,
+.network-node:focus-visible .network-ingredient {
+  stroke: #f8f1e7;
+  stroke-width: 2;
+}
+
+.network-label {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  fill: #051060;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.network-label-drink {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.network-label-ingredient {
+  font-size: 11px;
+  fill: #314368;
+}
+
+.network-legend,
+.network-hint {
+  position: absolute;
+  z-index: 2;
+  margin: 0;
+  pointer-events: none;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #4574ab;
+}
+
+.network-legend {
+  left: 1rem;
+  bottom: 0.85rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.network-legend i {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-right: 0.4rem;
+  border-radius: 50%;
+  vertical-align: -0.05rem;
+}
+
+.network-legend-star {
+  width: 0.72rem;
+  height: 0.72rem;
+  margin-right: 0.35rem;
+  vertical-align: -0.12rem;
+}
+
+.network-legend-star polygon {
+  fill: #506186;
+}
+
+.network-legend .is-ingredient {
+  background: #f8f1e7;
+  border: 1px solid #4574ab;
+  box-sizing: border-box;
+}
+
+.network-hint {
+  right: 1rem;
+  bottom: 0.85rem;
+}
+
+.network-panel {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 3;
+  width: min(16.5rem, calc(100% - 2rem));
+  max-height: calc(100% - 4.5rem);
+  overflow: auto;
+  padding: 0.9rem 1rem 1rem;
+  background: rgba(248, 241, 231, 0.96);
+  border: 1px solid rgba(69, 116, 171, 0.4);
+}
+
+.network-panel h3 {
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: #051060;
+}
+
+.network-panel-count {
+  margin: 0.3rem 0 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #4574ab;
+}
+
+.network-panel li + li {
+  margin-top: 0.15rem;
+}
+
+.network-panel button {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0;
+  border: none;
+  background: none;
+  text-align: left;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: #051060;
+}
+
+.network-panel button:hover {
+  color: #4574ab;
 }
 
 .saved-modal-close {

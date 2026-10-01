@@ -1,6 +1,8 @@
 import cherryArt from '../assets/ingredients/cherry.png';
+import colaArt from '../assets/ingredients/coca-cola.png';
 import lemonArt from '../assets/ingredients/lemon.png';
 import mangoArt from '../assets/ingredients/mango.png';
+import milkArt from '../assets/ingredients/milk.png';
 import orangeArt from '../assets/ingredients/orange.png';
 import strawberryArt from '../assets/ingredients/strawberry.png';
 import type { Ingredient } from '../types';
@@ -248,6 +250,7 @@ export const INGREDIENTS: Ingredient[] = [
     id: 'milk',
     name: 'Milk',
     emoji: '🥛',
+    art: milkArt,
     category: 'base',
     compatibleDrinkTypes: ['latte', 'smoothie'],
     flavorProfile: ['creamy', 'mild'],
@@ -289,6 +292,7 @@ export const INGREDIENTS: Ingredient[] = [
     id: 'coca-cola',
     name: 'Coca-Cola',
     emoji: '🥤',
+    art: colaArt,
     category: 'base',
     compatibleDrinkTypes: ['sparkling', 'refresher', 'mocktail'],
     flavorProfile: ['sweet', 'caramel', 'spiced'],
@@ -297,13 +301,13 @@ export const INGREDIENTS: Ingredient[] = [
     isFlavor: true,
   },
   {
-    id: 'sprite',
-    name: 'Sprite',
-    emoji: '🍋‍🟩',
+    id: 'calpico',
+    name: 'Calpico',
+    emoji: '🧃',
     category: 'base',
-    compatibleDrinkTypes: ['sparkling', 'refresher', 'mocktail'],
-    flavorProfile: ['sweet', 'citrus', 'crisp'],
-    color: '#e7f3c4',
+    compatibleDrinkTypes: ['sparkling', 'refresher', 'mocktail', 'latte'],
+    flavorProfile: ['sweet', 'milky', 'tangy'],
+    color: '#f4f0e6',
     isLiquid: true,
     isFlavor: true,
   },
@@ -333,7 +337,7 @@ export const SHELVES: { id: string; label: string; ids: string[] }[] = [
   {
     id: 'base',
     label: 'Bases',
-    ids: ['milk', 'sparkling-water', 'coca-cola', 'sprite'],
+    ids: ['milk', 'sparkling-water', 'coca-cola', 'calpico'],
   },
   {
     id: 'caffeine',

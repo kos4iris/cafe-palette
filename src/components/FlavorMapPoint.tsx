@@ -9,7 +9,7 @@ interface Props {
   onHover: (hovering: boolean) => void;
 }
 
-const STAR = starPoints(4.92, 2.1);
+const STAR = starPoints(4.51, 1.925);
 const STAR_COLOR = '#506186';
 
 export function FlavorMapPoint({

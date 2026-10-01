@@ -30,7 +30,7 @@ function judged(
 
 const DAIRY = ['milk'] as const;
 const CREAMY = ['milk', 'oat-milk'] as const;
-const ACIDIC_SODA = ['coca-cola', 'sprite', 'energy-drink'] as const;
+const ACIDIC_SODA = ['coca-cola', 'energy-drink'] as const;
 const CURDLING_CITRUS = ['lemon', 'lime', 'pineapple'] as const;
 const STRONG = ['coffee', 'matcha', 'energy-drink', 'black-tea'] as const;
 
