@@ -48,6 +48,12 @@ export interface GeneratedRecipe {
 
 export type Temperature = 'iced' | 'hot';
 export type Sweetness = 'low' | 'medium' | 'high';
+export type DietaryRestriction =
+  | 'dairy-free'
+  | 'vegan'
+  | 'gluten-free'
+  | 'sugar-free'
+  | 'no-caffeine';
 
 export const TEMPERATURES: { id: Temperature; label: string }[] = [
   { id: 'iced', label: 'Iced' },
@@ -58,6 +64,14 @@ export const SWEETNESS_LEVELS: { id: Sweetness; label: string }[] = [
   { id: 'low', label: 'Low' },
   { id: 'medium', label: 'Medium' },
   { id: 'high', label: 'High' },
+];
+
+export const DIETARY_RESTRICTIONS: { id: DietaryRestriction; label: string }[] = [
+  { id: 'dairy-free', label: 'Dairy-free' },
+  { id: 'vegan', label: 'Vegan' },
+  { id: 'gluten-free', label: 'Gluten-free' },
+  { id: 'sugar-free', label: 'Sugar-free' },
+  { id: 'no-caffeine', label: 'No caffeine' },
 ];
 
 export const DRINK_TYPES: { id: DrinkType; label: string; emoji: string }[] = [

@@ -1,4 +1,4 @@
-import type { DrinkType, Sweetness, Temperature } from '../types';
+import type { DietaryRestriction, DrinkType, Sweetness, Temperature } from '../types';
 import type { CompatibilityResult } from '../utils/checkIngredientCompatibility';
 
 export interface DrinkRecipeIngredient {
@@ -42,6 +42,12 @@ export interface DrinkRecipe {
   difficulty: number;
   difficultyLabel: string;
   sources: DrinkRecipeSource[];
+  dietaryRestrictions?: DietaryRestriction[];
+  dietaryConflict?: {
+    hasConflict: boolean;
+    message: string | null;
+    suggestion: string | null;
+  };
 }
 
 export interface GenerateDrinkInput {
@@ -52,6 +58,7 @@ export interface GenerateDrinkInput {
   servings: number;
   compatibility?: CompatibilityResult;
   recentRecipes?: RecentDrink[];
+  dietaryRestrictions?: DietaryRestriction[];
 }
 
 export interface RecentDrink {

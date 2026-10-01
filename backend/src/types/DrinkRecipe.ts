@@ -8,10 +8,18 @@ export const DRINK_TYPES = [
 ] as const;
 export const TEMPERATURES = ['iced', 'hot'] as const;
 export const SWEETNESS_LEVELS = ['low', 'medium', 'high'] as const;
+export const DIETARY_RESTRICTIONS = [
+  'dairy-free',
+  'vegan',
+  'gluten-free',
+  'sugar-free',
+  'no-caffeine',
+] as const;
 
 export type DrinkType = (typeof DRINK_TYPES)[number];
 export type Temperature = (typeof TEMPERATURES)[number];
 export type Sweetness = (typeof SWEETNESS_LEVELS)[number];
+export type DietaryRestriction = (typeof DIETARY_RESTRICTIONS)[number];
 
 export type CompatibilityStatus = 'good' | 'unusual' | 'problematic';
 
@@ -29,6 +37,8 @@ export interface GenerateDrinkRequest {
   sweetness: Sweetness;
   /** How many drinks to write the recipe for. */
   servings: number;
+  /** Hard constraints for both selected and added ingredients. Empty means none. */
+  dietaryRestrictions: DietaryRestriction[];
   compatibility?: CompatibilityNote;
   /** The last few drinks made from this same ingredient selection. */
   recentRecipes?: RecentRecipe[];
@@ -85,4 +95,11 @@ export interface DrinkRecipe {
   /** Matches difficulty: Very easy, Easy, Moderate, Advanced, or Very advanced. */
   difficultyLabel: string;
   sources: RecipeSource[];
+  /** Echo of the restrictions the recipe was written for. */
+  dietaryRestrictions: DietaryRestriction[];
+  dietaryConflict: {
+    hasConflict: boolean;
+    message: string | null;
+    suggestion: string | null;
+  };
 }

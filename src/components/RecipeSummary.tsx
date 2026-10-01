@@ -1,4 +1,5 @@
 import type { DrinkRecipe } from '../services/drinkApi';
+import { DIETARY_RESTRICTIONS } from '../types';
 
 export function RecipeSummary({ recipe }: { recipe: DrinkRecipe | null }) {
   if (!recipe) return null;
@@ -7,6 +8,10 @@ export function RecipeSummary({ recipe }: { recipe: DrinkRecipe | null }) {
   const servings = servingLabel(recipe.servings);
   const difficulty = recipe.difficulty;
   const label = recipe.difficultyLabel || labelFor(difficulty);
+  const diet = (recipe.dietaryRestrictions ?? [])
+    .map((id) => DIETARY_RESTRICTIONS.find((item) => item.id === id)?.label ?? id)
+    .join(', ');
+  const conflict = recipe.dietaryConflict;
 
   return (
     <section className="menu-section recipe-summary" aria-label="Recipe summary">
@@ -29,6 +34,18 @@ export function RecipeSummary({ recipe }: { recipe: DrinkRecipe | null }) {
         </span>
         <span className="summary-note">{label}</span>
       </p>
+      {diet && (
+        <p className="summary-row summary-diet">
+          <span className="summary-label">Diet</span>
+          <span className="summary-value">{diet}</span>
+        </p>
+      )}
+      {conflict?.hasConflict && conflict.message && (
+        <p className="diet-conflict" role="status">
+          {conflict.message}
+          {conflict.suggestion && <span className="compat-suggestion">{conflict.suggestion}</span>}
+        </p>
+      )}
     </section>
   );
 }

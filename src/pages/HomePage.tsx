@@ -5,7 +5,7 @@ import { RecipePanel } from '../components/RecipePanel';
 import { SelectedIngredients } from '../components/SelectedIngredients';
 import { getIngredientById } from '../data/ingredients';
 import { generateDrink, type DrinkRecipe, type RecentDrink } from '../services/drinkApi';
-import { type Sweetness, type Temperature } from '../types';
+import { type Sweetness, type Temperature, type DietaryRestriction } from '../types';
 import { useIngredientCompatibility } from '../hooks/useIngredientCompatibility';
 import { inferDrinkType } from '../utils/recipeEngine';
 
@@ -13,6 +13,7 @@ export default function HomePage() {
   const [temperature, setTemperature] = useState<Temperature>('iced');
   const [sweetness, setSweetness] = useState<Sweetness>('medium');
   const [servings, setServings] = useState(1);
+  const [dietaryRestrictions, setDietaryRestrictions] = useState<DietaryRestriction[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isDragOver, setDragOver] = useState(false);
 
@@ -41,6 +42,7 @@ export default function HomePage() {
     temperature,
     sweetness,
     servings,
+    [...dietaryRestrictions].sort(),
   ]);
   const aiRecipe = result?.key === inputKey ? result.recipe : null;
   const aiError = failure?.key === inputKey ? failure.message : null;
@@ -62,6 +64,7 @@ export default function HomePage() {
         temperature,
         sweetness,
         servings,
+        ...(dietaryRestrictions.length > 0 ? { dietaryRestrictions } : {}),
         ...(compatibilityNote ? { compatibility: compatibilityNote } : {}),
         ...(recent.length > 0 ? { recentRecipes: recent } : {}),
       });
@@ -136,9 +139,11 @@ export default function HomePage() {
             temperature={temperature}
             sweetness={sweetness}
             servings={servings}
+            dietaryRestrictions={dietaryRestrictions}
             onTemperature={setTemperature}
             onSweetness={setSweetness}
             onServings={setServings}
+            onDietaryRestrictions={setDietaryRestrictions}
             canGenerate={selected.length >= 1}
             isGenerating={isGenerating}
             onGenerate={handleGenerate}

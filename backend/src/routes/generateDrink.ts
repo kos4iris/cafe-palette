@@ -4,9 +4,11 @@ import {
   generateDrinkRecipe,
 } from '../services/gemini.js';
 import {
+  DIETARY_RESTRICTIONS,
   DRINK_TYPES,
   SWEETNESS_LEVELS,
   TEMPERATURES,
+  type DietaryRestriction,
   type GenerateDrinkRequest,
   type RecentRecipe,
 } from '../types/DrinkRecipe.js';
@@ -78,6 +80,7 @@ function parseRequest(body: unknown): ParseResult {
       temperature,
       sweetness,
       servings,
+      dietaryRestrictions: parseDietaryRestrictions(input.dietaryRestrictions),
       compatibility: parseCompatibility(input.compatibility),
       recentRecipes: parseRecentRecipes(input.recentRecipes),
     },
@@ -102,6 +105,16 @@ function parseCompatibility(value: unknown) {
     reason: shortText(note.reason, 240),
     suggestion: shortText(note.suggestion, 180),
   };
+}
+
+function parseDietaryRestrictions(value: unknown): DietaryRestriction[] {
+  if (!Array.isArray(value)) return [];
+  const chosen: DietaryRestriction[] = [];
+  for (const item of value) {
+    if (!isOneOf(DIETARY_RESTRICTIONS, item) || chosen.includes(item)) continue;
+    chosen.push(item);
+  }
+  return chosen;
 }
 
 function parseServings(value: unknown): number | null {
