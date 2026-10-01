@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react';
 import { GenerateControls } from '../components/GenerateControls';
 import { MixingCanvas } from '../components/MixingCanvas';
 import { RecipePanel } from '../components/RecipePanel';
-import { SelectedBubbles } from '../components/SelectedBubbles';
+import { SelectedIngredients } from '../components/SelectedIngredients';
 import { getIngredientById } from '../data/ingredients';
 import { generateDrink, type DrinkRecipe, type RecentDrink } from '../services/drinkApi';
 import { type Sweetness, type Temperature } from '../types';
@@ -87,6 +87,10 @@ export default function HomePage() {
     setSelectedIds((prev) => prev.filter((x) => x !== id));
   }
 
+  function clearIngredients() {
+    setSelectedIds([]);
+  }
+
   return (
     <div className="app">
       <main className="workspace">
@@ -118,10 +122,15 @@ export default function HomePage() {
               />
             </div>
           </div>
-          <SelectedBubbles selected={selected} onRemove={removeIngredient} />
         </section>
 
-        <RecipePanel aiRecipe={aiRecipe} error={aiError} compatibility={compatibility}>
+        <RecipePanel aiRecipe={aiRecipe} error={aiError}>
+          <SelectedIngredients
+            selected={selected}
+            onRemove={removeIngredient}
+            onClear={clearIngredients}
+            compatibility={compatibility}
+          />
           <GenerateControls
             temperature={temperature}
             sweetness={sweetness}
