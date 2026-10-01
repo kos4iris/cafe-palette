@@ -694,9 +694,9 @@
 .generate-btn {
   margin-top: 0.45rem;
   padding: 0.8rem 1rem;
-  border: 1px solid #4574ab;
-  background: #4574ab;
-  color: #f8f1e7;
+  border: 1px solid #adc7d9;
+  background: #adc7d9;
+  color: #051060;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 0.8rem;
   font-weight: 400;
@@ -708,9 +708,11 @@
     opacity 0.2s ease;
 }
 
-.generate-btn:hover:not(:disabled) {
-  background: transparent;
-  color: #4574ab;
+.generate-btn:hover:not(:disabled),
+.view-recipe:hover {
+  border-color: #4574ab;
+  background: #4574ab;
+  color: #f8f1e7;
 }
 
 .generate-btn:disabled {
@@ -863,19 +865,14 @@
   width: 100%;
   margin-top: 1.35rem;
   padding: 0.8rem 1rem;
-  border: 1px solid #4574ab;
-  background: transparent;
-  color: #4574ab;
+  border: 1px solid #adc7d9;
+  background: #adc7d9;
+  color: #051060;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 0.8rem;
   font-weight: 400;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-.view-recipe:hover {
-  background: #4574ab;
-  color: #f8f1e7;
 }
 
 .save-recipe-row {
