@@ -988,7 +988,15 @@
   padding: 2.5rem clamp(1.25rem, 4vw, 3.5rem) 4.5rem;
 }
 
+.saved-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
 .saved-header h1 {
+  margin: 0;
   font-family: 'Aston Script', cursive;
   font-weight: 700;
   font-size: clamp(2.6rem, 6vw, 3.5rem);
@@ -999,8 +1007,7 @@
 }
 
 .saved-lead {
-  margin-top: calc(0.7rem + 10px);
-  max-width: 28rem;
+  margin: 0;
   font-size: 18px;
   font-weight: 300;
   line-height: 1.45;

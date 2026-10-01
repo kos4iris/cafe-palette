@@ -18,7 +18,7 @@ export default function SavedRecipesPage() {
     <div className="saved-page">
       <header className="saved-header">
         <h1>Saved Recipes</h1>
-        <p className="saved-lead">your favorite drink recipes</p>
+        <p className="saved-lead">your favorite drink recipes.</p>
       </header>
 
       {recipes.length === 0 ? (
