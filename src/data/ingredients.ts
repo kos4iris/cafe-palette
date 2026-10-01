@@ -4,7 +4,9 @@ import lemonArt from '../assets/ingredients/lemon.png';
 import mangoArt from '../assets/ingredients/mango.png';
 import milkArt from '../assets/ingredients/milk.png';
 import orangeArt from '../assets/ingredients/orange.png';
+import sparklingArt from '../assets/ingredients/sparkling-water.png';
 import strawberryArt from '../assets/ingredients/strawberry.png';
+import yakultArt from '../assets/ingredients/yakult.png';
 import type { Ingredient } from '../types';
 
 const ALL: Ingredient['compatibleDrinkTypes'] = [
@@ -271,6 +273,7 @@ export const INGREDIENTS: Ingredient[] = [
     id: 'sparkling-water',
     name: 'Sparkling water',
     emoji: '🫧',
+    art: sparklingArt,
     category: 'base',
     compatibleDrinkTypes: ['sparkling', 'mocktail', 'refresher'],
     flavorProfile: ['crisp', 'neutral', 'bubbly'],
@@ -301,9 +304,10 @@ export const INGREDIENTS: Ingredient[] = [
     isFlavor: true,
   },
   {
-    id: 'calpico',
-    name: 'Calpico',
+    id: 'yakult',
+    name: 'Yakult',
     emoji: '🧃',
+    art: yakultArt,
     category: 'base',
     compatibleDrinkTypes: ['sparkling', 'refresher', 'mocktail', 'latte'],
     flavorProfile: ['sweet', 'milky', 'tangy'],
@@ -337,7 +341,7 @@ export const SHELVES: { id: string; label: string; ids: string[] }[] = [
   {
     id: 'base',
     label: 'Bases',
-    ids: ['milk', 'sparkling-water', 'coca-cola', 'calpico'],
+    ids: ['milk', 'sparkling-water', 'coca-cola', 'yakult'],
   },
   {
     id: 'caffeine',
