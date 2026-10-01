@@ -4,8 +4,28 @@ export type CompatibilityStatus = 'good' | 'unusual' | 'problematic';
 
 export interface CompatibilityResult {
   status: CompatibilityStatus;
+  title: string;
   reason?: string;
-  suggestion?: string;
+  suggestion?: string | null;
+}
+
+export const COMPATIBILITY_TITLES: Record<CompatibilityStatus, string> = {
+  good: 'Great pairing',
+  unusual: 'Interesting combination',
+  problematic: 'Heads up',
+};
+
+function judged(
+  status: CompatibilityStatus,
+  reason: string,
+  suggestion?: string,
+): CompatibilityResult {
+  return {
+    status,
+    title: COMPATIBILITY_TITLES[status],
+    reason,
+    suggestion: suggestion ?? null,
+  };
 }
 
 const DAIRY = ['milk'] as const;
@@ -33,66 +53,62 @@ export function checkIngredientCompatibility(
   if (dairy.length > 0 && soda.length > 0) {
     const milk = nameOf(dairy[0]);
     const acid = nameOf(soda[0]);
-    return {
-      status: 'problematic',
-      reason: `${milk} + ${acid} may separate because ${acid} is acidic.`,
-      suggestion:
-        soda[0] === 'coca-cola'
-          ? 'Try oat milk, cream soda, or sparkling water instead.'
-          : 'Try oat milk, or sparkling water instead.',
-    };
+    return judged(
+      'problematic',
+      `${milk} + ${acid} may separate because ${acid} is acidic.`,
+      soda[0] === 'coca-cola'
+        ? 'Try oat milk, cream soda, or sparkling water instead.'
+        : 'Try oat milk, or sparkling water instead.',
+    );
   }
 
   if (dairy.length > 0 && citrus.length > 0) {
-    return {
-      status: 'problematic',
-      reason: `${nameOf(dairy[0])} + ${nameOf(citrus[0])} may separate because citrus is acidic.`,
-      suggestion: 'Try oat milk, which is less likely to curdle.',
-    };
+    return judged(
+      'problematic',
+      `${nameOf(dairy[0])} + ${nameOf(citrus[0])} may separate because citrus is acidic.`,
+      'Try oat milk, which is less likely to curdle.',
+    );
   }
 
   const strong = STRONG.filter((id) => ids.has(id));
   if (strong.length >= 3) {
-    return {
-      status: 'unusual',
-      reason: 'This has several strong flavors, so it may taste muddy. It could still work if one of them leads.',
-      suggestion: 'Try keeping one bold ingredient and building around it.',
-    };
+    return judged(
+      'unusual',
+      'This has several strong flavors, so it may taste muddy. It could still work if one of them leads.',
+      'Try keeping one bold ingredient and building around it.',
+    );
   }
 
   if (ids.has('coffee') && ids.has('matcha')) {
-    return {
-      status: 'unusual',
-      reason: 'This combination is a little adventurous, but it could still work.',
-      suggestion: 'Let one of them lead, and keep the other as a small accent.',
-    };
+    return judged(
+      'unusual',
+      'This combination is a little adventurous, but it could still work.',
+      'Let one of them lead, and keep the other as a small accent.',
+    );
   }
 
   if (ids.has('milk') && ids.has('oat-milk')) {
-    return {
-      status: 'unusual',
-      reason: 'Milk and oat milk together may make the drink overly rich.',
-      suggestion: 'Try using just one creamy base.',
-    };
+    return judged(
+      'unusual',
+      'Milk and oat milk together may make the drink overly rich.',
+      'Try using just one creamy base.',
+    );
   }
 
   if ((ids.has('milk') || ids.has('oat-milk')) && ids.has('sparkling-water')) {
-    return {
-      status: 'unusual',
-      reason: 'This combination is a little adventurous, but it could still work.',
-    };
+    return judged('unusual', 'This combination is a little adventurous, but it could still work.');
   }
 
   if (ids.has('coffee') && (ids.has('lemon') || ids.has('lime'))) {
-    return {
-      status: 'unusual',
-      reason: 'This combination is a little adventurous, but it could still work.',
-      suggestion: 'A small squeeze of citrus usually works better than a full citrus base.',
-    };
+    return judged(
+      'unusual',
+      'This combination is a little adventurous, but it could still work.',
+      'A small squeeze of citrus usually works better than a full citrus base.',
+    );
   }
 
   const good = goodPairing(ids, nameOf);
-  return good ? { status: 'good', reason: good } : null;
+  return good ? judged('good', good) : null;
 }
 
 function goodPairing(

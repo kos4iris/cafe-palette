@@ -31,6 +31,7 @@ export default function HomePage() {
 
   const drinkType = useMemo(() => inferDrinkType(selected), [selected]);
   const compatibility = useIngredientCompatibility(selected);
+  const compatibilityNote = compatibility.kind === 'result' ? compatibility.result : null;
 
   // A generated recipe only describes the inputs it was made from. When any of
   // them change, it stops matching this key and is hidden rather than misleading.
@@ -61,7 +62,7 @@ export default function HomePage() {
         temperature,
         sweetness,
         servings,
-        ...(compatibility ? { compatibility } : {}),
+        ...(compatibilityNote ? { compatibility: compatibilityNote } : {}),
         ...(recent.length > 0 ? { recentRecipes: recent } : {}),
       });
       setResult({ key, recipe });

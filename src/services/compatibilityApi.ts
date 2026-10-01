@@ -1,4 +1,7 @@
-import type { CompatibilityResult } from '../utils/checkIngredientCompatibility';
+import {
+  COMPATIBILITY_TITLES,
+  type CompatibilityResult,
+} from '../utils/checkIngredientCompatibility';
 
 const TIMEOUT_MS = 20_000;
 
@@ -22,15 +25,26 @@ export async function checkCompatibility(
     if (!response.ok || !isCompatibility(data)) {
       throw new Error('Compatibility check failed');
     }
-    return data;
+    return {
+      ...data,
+      title: COMPATIBILITY_TITLES[data.status],
+      suggestion: data.suggestion ?? null,
+    };
   } finally {
     clearTimeout(timer);
     signal.removeEventListener('abort', onAbort);
   }
 }
 
-function isCompatibility(data: unknown): data is CompatibilityResult {
+function isCompatibility(
+  data: unknown,
+): data is CompatibilityResult & { suggestion?: string | null } {
   if (typeof data !== 'object' || data === null) return false;
   const status = (data as { status?: unknown }).status;
-  return status === 'good' || status === 'unusual' || status === 'problematic';
+  const reason = (data as { reason?: unknown }).reason;
+  return (
+    (status === 'good' || status === 'unusual' || status === 'problematic') &&
+    typeof reason === 'string' &&
+    reason.trim().length > 0
+  );
 }

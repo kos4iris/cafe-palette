@@ -124,9 +124,9 @@ const COMPATIBILITY_INSTRUCTION = `You judge whether a set of cafe-drink ingredi
 Return one short judgment. Do not write a recipe.
 
 Use status:
-- "good" when the flavors generally pair well
-- "unusual" when the mix is adventurous but can still work with the right technique
-- "problematic" when there is a real texture, separation, or muddy-flavor issue
+- "good" when the flavors generally pair well. title must be "Great pairing"
+- "unusual" when the mix is adventurous but can still work with the right technique. title must be "Interesting combination"
+- "problematic" when there is a real texture, separation, or muddy-flavor issue. title must be "Heads up"
 
 Distinguish a flavor mismatch from a texture or separation issue, and say which one it is.
 Explain separation or curdling briefly when it applies.
@@ -138,10 +138,11 @@ const COMPATIBILITY_SCHEMA = {
   type: 'object',
   properties: {
     status: { type: 'string', enum: ['good', 'unusual', 'problematic'] },
+    title: { type: 'string' },
     reason: { type: 'string' },
     suggestion: { type: ['string', 'null'] },
   },
-  required: ['status', 'reason', 'suggestion'],
+  required: ['status', 'title', 'reason', 'suggestion'],
 } as const;
 
 /**
@@ -391,6 +392,7 @@ function compatibilityNote(request: GenerateDrinkRequest): string {
 
 export async function evaluateCompatibility(ingredients: string[]): Promise<{
   status: 'good' | 'unusual' | 'problematic';
+  title: string;
   reason: string;
   suggestion: string | null;
 }> {
@@ -448,6 +450,7 @@ export async function generateDrinkRecipe(
 
 function parseCompatibilityResponse(text: string | undefined): {
   status: 'good' | 'unusual' | 'problematic';
+  title: string;
   reason: string;
   suggestion: string | null;
 } {
@@ -469,8 +472,14 @@ function parseCompatibilityResponse(text: string | undefined): {
   ) {
     throw new GeminiResponseError('Gemini returned an incomplete compatibility check');
   }
+  const titles = {
+    good: 'Great pairing',
+    unusual: 'Interesting combination',
+    problematic: 'Heads up',
+  } as const;
   return {
     status,
+    title: titles[status],
     reason,
     suggestion: cleanString(obj.suggestion),
   };

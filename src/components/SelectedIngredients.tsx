@@ -1,12 +1,12 @@
+import type { CompatibilityFeedback } from '../hooks/useIngredientCompatibility';
 import type { Ingredient } from '../types';
-import type { CompatibilityResult } from '../utils/checkIngredientCompatibility';
 import { CompatibilityNote } from './CompatibilityNote';
 
 interface Props {
   selected: Ingredient[];
   onRemove: (id: string) => void;
   onClear: () => void;
-  compatibility: CompatibilityResult | null;
+  compatibility: CompatibilityFeedback;
 }
 
 export function SelectedIngredients({ selected, onRemove, onClear, compatibility }: Props) {
@@ -46,7 +46,7 @@ export function SelectedIngredients({ selected, onRemove, onClear, compatibility
           ))}
         </ul>
       )}
-      <CompatibilityNote result={compatibility} />
+      <CompatibilityNote feedback={compatibility} />
     </section>
   );
 }

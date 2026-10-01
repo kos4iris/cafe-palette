@@ -12,7 +12,7 @@ export const checkCompatibilityRouter = Router();
 checkCompatibilityRouter.post('/', async (req, res) => {
   const ingredients = parseIngredients(req.body);
   if (!ingredients) {
-    res.status(400).json({ error: 'Send 3 to 12 ingredient names.' });
+    res.status(400).json({ error: 'Send 2 to 12 ingredient names.' });
     return;
   }
 
@@ -38,7 +38,7 @@ checkCompatibilityRouter.post('/', async (req, res) => {
 function parseIngredients(body: unknown): string[] | null {
   if (typeof body !== 'object' || body === null) return null;
   const list = (body as { ingredients?: unknown }).ingredients;
-  if (!Array.isArray(list) || list.length < 3 || list.length > MAX_INGREDIENTS) return null;
+  if (!Array.isArray(list) || list.length < 2 || list.length > MAX_INGREDIENTS) return null;
 
   const seen = new Set<string>();
   const ingredients: string[] = [];
@@ -51,5 +51,5 @@ function parseIngredients(body: unknown): string[] | null {
       ingredients.push(name);
     }
   }
-  return ingredients.length >= 3 ? ingredients : null;
+  return ingredients.length >= 2 ? ingredients : null;
 }
