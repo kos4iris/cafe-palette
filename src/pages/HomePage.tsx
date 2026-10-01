@@ -121,12 +121,7 @@ export default function HomePage() {
           <SelectedBubbles selected={selected} onRemove={removeIngredient} />
         </section>
 
-        <RecipePanel
-          aiRecipe={aiRecipe}
-          isGenerating={isGenerating}
-          error={aiError}
-          compatibility={compatibility}
-        >
+        <RecipePanel aiRecipe={aiRecipe} error={aiError} compatibility={compatibility}>
           <GenerateControls
             temperature={temperature}
             sweetness={sweetness}

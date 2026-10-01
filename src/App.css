@@ -161,7 +161,8 @@
   color: #051060;
 }
 
-.menu-panel .recipe-summary {
+.menu-panel .recipe-summary,
+.saved-modal .recipe-summary {
   position: static;
   width: auto;
   height: auto;
@@ -174,6 +175,10 @@
   gap: 0.85rem;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #314368;
+}
+
+.saved-modal .recipe-summary {
+  margin-top: 1.15rem;
 }
 
 .summary-row {
@@ -888,6 +893,24 @@
 .site-nav a.is-active {
   color: #051060;
   border-bottom-color: #051060;
+}
+
+.view-recipe {
+  margin-top: 1.35rem;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid #4574ab;
+  background: transparent;
+  color: #4574ab;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.view-recipe:hover {
+  background: #4574ab;
+  color: #f8f1e7;
 }
 
 .save-recipe-row {
