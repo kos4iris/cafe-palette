@@ -180,6 +180,17 @@ generateDrinkRouter.post('/', async (req, res) => {
   }
 
   try {
+    console.log(
+      '[generate-drink] request',
+      JSON.stringify({
+        ingredients: parsed.value.ingredients,
+        drinkType: parsed.value.drinkType,
+        temperature: parsed.value.temperature,
+        sweetness: parsed.value.sweetness,
+        servings: parsed.value.servings,
+        dietaryRestrictions: parsed.value.dietaryRestrictions,
+      }),
+    );
     res.json(await generateDrinkRecipe(parsed.value));
   } catch (err) {
     // Log the message only: never the client, config, or key.

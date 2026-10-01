@@ -102,4 +102,14 @@ export interface DrinkRecipe {
     message: string | null;
     suggestion: string | null;
   };
+  /** A finishing layer, or null when this drink should not have one. */
+  topper: {
+    name: string;
+    description: string;
+  } | null;
+  /** Debug note for why a topper was included or left off. */
+  topperDecision: {
+    considered: boolean;
+    reason: string;
+  };
 }

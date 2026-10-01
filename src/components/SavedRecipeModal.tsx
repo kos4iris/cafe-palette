@@ -61,6 +61,15 @@ export function SavedRecipeModal({ recipe, onClose }: Props) {
           ))}
         </ul>
 
+        {recipe.topper?.name && recipe.topper.description && (
+          <>
+            <h3>Topper</h3>
+            <p className="recipe-topper">
+              {recipe.topper.name}. {recipe.topper.description}
+            </p>
+          </>
+        )}
+
         {equipment.length > 0 && (
           <>
             <h3>Equipment</h3>

@@ -16,6 +16,10 @@ export interface SavedRecipe {
   instructions: DrinkRecipeStep[];
   equipment?: string[];
   sources?: DrinkRecipeSource[];
+  topper?: {
+    name: string;
+    description: string;
+  } | null;
   savedAt: string;
 }
 
@@ -102,6 +106,14 @@ export function saveRecipe(recipe: DrinkRecipe): SavedRecipe {
     })),
     equipment: [...recipe.equipment],
     sources: recipe.sources.map((source) => ({ ...source })),
+    ...(recipe.topper?.name && recipe.topper.description
+      ? {
+          topper: {
+            name: recipe.topper.name,
+            description: recipe.topper.description,
+          },
+        }
+      : {}),
     savedAt: new Date().toISOString(),
   };
 

@@ -48,6 +48,15 @@ export interface DrinkRecipe {
     message: string | null;
     suggestion: string | null;
   };
+  /** A finishing layer, or null when this drink has none. */
+  topper?: {
+    name: string;
+    description: string;
+  } | null;
+  topperDecision?: {
+    considered: boolean;
+    reason: string;
+  };
 }
 
 export interface GenerateDrinkInput {
@@ -96,6 +105,7 @@ export async function generateDrink(
     if (!isDrinkRecipe(data)) {
       throw new DrinkApiError(GENERIC_ERROR);
     }
+    console.log('[generate-drink] recipe', data);
     return data;
   } catch (err) {
     if (err instanceof DrinkApiError) throw err;
