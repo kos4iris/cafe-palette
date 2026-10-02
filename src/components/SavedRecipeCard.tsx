@@ -1,4 +1,6 @@
+import { previewIngredientName } from '../utils/previewIngredientName';
 import type { SavedRecipe } from '../utils/savedRecipes';
+import { RecipeSummary } from './RecipeSummary';
 
 interface Props {
   recipe: SavedRecipe;
@@ -17,10 +19,14 @@ function formatSavedDate(iso: string): string {
 }
 
 export function SavedRecipeCard({ recipe, onOpen, onRemove }: Props) {
-  const preview = recipe.ingredients
-    .slice(0, 3)
-    .map((item) => item.name)
-    .join(' · ');
+  const preview = [
+    ...new Set(
+      recipe.ingredients
+        .filter((item) => item.userSelected !== false)
+        .map((item) => previewIngredientName(item.name))
+        .filter(Boolean),
+    ),
+  ].join(' · ');
   const date = formatSavedDate(recipe.savedAt);
 
   return (
@@ -28,6 +34,7 @@ export function SavedRecipeCard({ recipe, onOpen, onRemove }: Props) {
       <h2 className="saved-card-name">{recipe.name}</h2>
       <p className="saved-card-desc">{recipe.description}</p>
       {preview && <p className="saved-card-ings">{preview}</p>}
+      <RecipeSummary recipe={recipe} />
       {date && <p className="saved-card-date">Saved {date}</p>}
       <div className="saved-card-actions">
         <button

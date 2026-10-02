@@ -5,6 +5,7 @@ import type {
   DrinkRecipeStep,
   FlavorProfile,
 } from '../services/drinkApi';
+import type { DietaryRestriction } from '../types';
 import { isFlavorProfile } from './flavorProfile';
 
 const STORAGE_KEY = 'cafe-palette-saved-recipes';
@@ -23,6 +24,11 @@ export interface SavedRecipe {
     description: string;
   } | null;
   flavorProfile?: FlavorProfile | null;
+  prepTime?: string;
+  servings?: number;
+  difficulty?: number;
+  difficultyLabel?: string;
+  dietaryRestrictions?: DietaryRestriction[];
   savedAt: string;
 }
 
@@ -119,6 +125,13 @@ export function saveRecipe(recipe: DrinkRecipe): SavedRecipe {
       : {}),
     ...(isFlavorProfile(recipe.flavorProfile)
       ? { flavorProfile: { ...recipe.flavorProfile } }
+      : {}),
+    prepTime: recipe.prepTime,
+    servings: recipe.servings,
+    difficulty: recipe.difficulty,
+    difficultyLabel: recipe.difficultyLabel,
+    ...(recipe.dietaryRestrictions?.length
+      ? { dietaryRestrictions: [...recipe.dietaryRestrictions] }
       : {}),
     savedAt: new Date().toISOString(),
   };
