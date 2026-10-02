@@ -1,12 +1,13 @@
 # Cafe Palette
 
-A playful drink-mixing web app. Drag ingredient pictures into a glass, pick a drink style, and press **Generate My Drink** to get a recipe written by Gemini.
+Drag ingredient graphics into a glass, select any preferences and dietary restrictions, then click "Generate My Drink" for a recipe written by Gemini and grounded with Google Search.
 
 ## Stack
 
-- Frontend: React + TypeScript + Vite + plain CSS
-- Backend: Node.js + Express + TypeScript (`backend/`)
-- AI: Google Gemini, called only from the backend
+- HTML, CSS, TypeScript, React, Vite
+- D3 for the flavor map and ingredient network
+- Node.js and Express (`backend/`)
+- Google Gemini, called only from the backend
 
 ## Setup
 
@@ -63,6 +64,6 @@ Open http://localhost:5173. Vite forwards `/api/*` to the backend.
 }
 ```
 
-Returns `{ name, description, ingredients: [{ name, amount }], instructions, garnish }`, or `{ error }` with a 400 (bad request), 503 (no API key configured) or 502 (Gemini failed).
+Returns `{ name, description, ingredients: [{ name, amount, userSelected }], equipment, instructions: [{ step, instruction }], prepTime, servings, difficulty, difficultyLabel, sources, dietaryRestrictions, dietaryConflict, topper, flavorProfile }`, or `{ error }` with a 400 (bad request), 503 (no API key configured) or 502 (Gemini failed). `topper` is `{ name, description }` or `null`. `flavorProfile` is `{ sweet, tart, light, rich }` from 0 to 10, or `null`.
 
 Optional `backend/.env` settings: `GEMINI_MODEL` (default `gemini-3.5-flash-lite`) and `PORT` (default `3001`).

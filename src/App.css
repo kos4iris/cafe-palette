@@ -1440,6 +1440,12 @@
   color: #4574ab;
 }
 
+#flavor-map-title {
+  position: relative;
+  top: 2.25rem;
+  z-index: 2;
+}
+
 .flavor-map-block {
   display: flex;
   flex-direction: column;
